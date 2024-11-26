@@ -1,0 +1,53 @@
+# User-specific files
+*.user
+*.userprefs
+*.swp
+*.csproj
+*.sln
+
+# Build results
+Client/Build/
+
+# Auto-generated files by Unity3D
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]in/
+Client/Logs/
+Client/UserSettings/
+# Uncomment if you are using Rider
+.idea/
+
+# Unity generated files
+.vscode/
+.vs/
+.vsconfig
+
+# User-specific files
+*.prefs
+
+# 忽略编译输出文件
+Server/bin/
+Server/obj/
+
+/# 忽略 NuGet 包缓存
+Server/packages/
+
+# 忽略 Visual Studio 配置文件
+*.suo
+*.userosscache
+*.sln.docstates
+
+# 忽略日志文件
+*.log
+
+# 忽略临时文件
+*~
+*.bak
+*.swp
+
+# 忽略环境配置文件
+.env
+
+# 忽略发布时生成的文件
+/publish/
