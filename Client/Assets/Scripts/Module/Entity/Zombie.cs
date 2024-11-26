@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Zombie : BaseSteve
+public class Zombie : BaseSteve, PoolObject
 {
 
     public override void Init()
@@ -27,5 +27,10 @@ public class Zombie : BaseSteve
     {
         Attacked(damage);
         //: animation
+    }
+
+    public void OnRecycle()
+    {
+        hp = 10;
     }
 }

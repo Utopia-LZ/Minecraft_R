@@ -23,6 +23,9 @@ public static class EventHandler
     public delegate void RefreshChestPanel(ChestPanel panel);
     public static event RefreshChestPanel OnRefreshChestPanel;
 
+    public delegate void AfterLoadRes();
+    public static event AfterLoadRes OnAfterLoadRes;
+
     public static void CallMouseEvent(int layer)
     {
         if (MouseEvents.ContainsKey(layer))
@@ -54,5 +57,10 @@ public static class EventHandler
     public static void CallRefreshChestPanel(ChestPanel panel)
     {
         OnRefreshChestPanel?.Invoke(panel);
+    }
+
+    public static void CallAfterLoadRes()
+    {
+        OnAfterLoadRes?.Invoke();
     }
 }

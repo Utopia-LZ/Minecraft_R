@@ -56,7 +56,7 @@ public class LightManager : Singleton<LightManager>
 
     public void AddLight(int idx, Vector3Int corner)
     {
-        GameObject go = ResManager.InstantiatePrefab("prefab_light");
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.Light);
         go.transform.position = corner.ToVector3() + new Vector3(0.5f, 0.5f, 0.5f);
         Light newLight = go.GetComponent<Light>();
         Lights[idx] = newLight;
@@ -67,7 +67,8 @@ public class LightManager : Singleton<LightManager>
     {
         if (Lights.ContainsKey(idx))
         {
-            GameObject.Destroy(Lights[idx].gameObject);
+            //GameObject.Destroy(Lights[idx].gameObject);
+            ResManager.Instance.RecycleObj(Lights[idx].gameObject, ObjType.Light);
             Lights.Remove(idx);
         }
         else { Debug.Log("Light doesn't exist! " + idx); }
@@ -77,7 +78,8 @@ public class LightManager : Singleton<LightManager>
     {
         foreach (var light in Lights.Values)
         {
-            GameObject.Destroy(light.gameObject);
+            //GameObject.Destroy(light.gameObject);
+            ResManager.Instance.RecycleObj(light.gameObject, ObjType.Light);
         }
         Lights.Clear();
     }
@@ -90,7 +92,7 @@ public class LightManager : Singleton<LightManager>
 
     public void StopTimer()
     {
-        timer.Stop();
-        timer.Dispose();
+        timer?.Stop();
+        timer?.Dispose();
     }
 }

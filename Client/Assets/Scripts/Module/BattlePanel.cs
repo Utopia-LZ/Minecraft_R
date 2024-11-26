@@ -9,6 +9,11 @@ public class BattlePanel : BasePanel
     public Slider slider;
     private BaseSteve steve;
 
+    private void Start()
+    {
+        InitAim();
+    }
+
     public override void OnAwake()
     {
         btnLeave.onClick.AddListener(OnClickLeave);
@@ -19,7 +24,6 @@ public class BattlePanel : BasePanel
     //初始化
     public override void OnInit()
     {
-        
     }
     //显示
     public override void OnShow()
@@ -31,24 +35,6 @@ public class BattlePanel : BasePanel
         }
     }
 
-
-    //更新信息
-    /*private void RefreshCampInfo()
-    {
-        int count1 = 0;
-        int count2 = 0;
-        foreach (BaseSteve tank in BattleManager.characters.Values)
-        {
-            if (tank.IsDie())
-            {
-                continue;
-            }
-
-            if (tank.camp == 1) { count1++; };
-            if (tank.camp == 2) { count2++; };
-        }
-    }*/
-
     private void OnClickLeave()
     {
         MsgLeaveRoom msg = new MsgLeaveRoom();
@@ -59,6 +45,18 @@ public class BattlePanel : BasePanel
     private void RefreshHp(float value)
     {
         slider.value = value;
+    }
+
+    public void InitAim()
+    {
+        Material mat = ResManager.Instance.LoadResources<Material>(ObjType.MatAim);
+        Transform aimRoot = GameObject.Find("AimStar").transform;
+        Debug.Log("InitAim");
+        foreach (Transform aim in aimRoot)
+        {
+            aim.gameObject.GetComponent<Image>().material = mat;
+            Debug.Log("InitAim child");
+        }
     }
 
     //关闭

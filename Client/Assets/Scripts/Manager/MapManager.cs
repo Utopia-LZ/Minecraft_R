@@ -3,14 +3,12 @@ using UnityEngine;
 
 public class MapManager
 {
-    private static GameObject chunkPrefab;
     public static Dictionary<Vector3Int, Chunk> chunks = new();
     private static int[] offsetX = new int[9]{0,1,1,0,-1,-1,-1,0,1};
     private static int[] offsetZ = new int[9]{0,0,-1,-1,-1,0,1,1,1};
 
     public static void Init()
     {
-        chunkPrefab = ResManager.LoadResources<GameObject>("prefab_chunk");
         NetManager.AddMsgListener("MsgMapInit", OnMsgMapInit);
         NetManager.AddMsgListener("MsgMapChange", OnMsgMapChange);
         EventHandler.OnLeaveRoom += ClearMap;
@@ -39,7 +37,9 @@ public class MapManager
     {
         foreach(var chunk in chunks.Values)
         {
-            GameObject.Destroy(chunk.gameObject);
+            //GameObject.Destroy(chunk.gameObject);
+            ResManager.Instance.RecycleObj(chunk.gameObject, ObjType.Chunk);
+            chunk.OnRecycle();
         }
         chunks.Clear();
     }
@@ -50,7 +50,9 @@ public class MapManager
         if (chunks.ContainsKey(msg.chunkPos)) return;
 
         Vector3 wpos = msg.chunkPos.ToVector3();
-        chunks[msg.chunkPos] = MonoBehaviour.Instantiate(chunkPrefab, wpos, Quaternion.identity).GetComponent<Chunk>();
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.Chunk);
+        go.transform.position = wpos;
+        chunks[msg.chunkPos] = go.GetComponent<Chunk>();
         chunks[msg.chunkPos].InitMap(msg.chunkId,msg.chunkPos,To3(msg.map));
 
         BattleManager.FreezePlayers(false);

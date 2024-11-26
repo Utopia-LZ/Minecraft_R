@@ -10,7 +10,6 @@ public class PanelManager : MonoBehaviour
         panels = new Dictionary<PanelType, BasePanel>();
         panels[PanelType.Login] = GetComponentInChildren<LoginPanel>();
         panels[PanelType.Register] = GetComponentInChildren<RegisterPanel>();
-        //panels[PanelType.Room] = GetComponentInChildren<RoomPanel>();
         panels[PanelType.RoomList] = GetComponentInChildren<RoomListPanel>();
         panels[PanelType.Battle] = GetComponentInChildren<BattlePanel>();
         panels[PanelType.Chat] = GetComponentInChildren<ChatPanel>();

@@ -18,7 +18,7 @@ public enum BlockType : byte
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(MeshFilter))]
-public class Chunk : MonoBehaviour
+public class Chunk : MonoBehaviour, PoolObject
 {
     public static int width = 16;
     public static int height = 20;
@@ -145,6 +145,11 @@ public class Chunk : MonoBehaviour
             tris.Add(index + 2);
             tris.Add(index + 0);
         }
+    }
+
+    public void OnRecycle()
+    {
+        
     }
 }
 

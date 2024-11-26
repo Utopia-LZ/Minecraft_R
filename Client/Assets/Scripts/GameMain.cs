@@ -6,7 +6,7 @@ public class GameMain : MonoBehaviour
     public static string id = "";
     private void Start()
     {
-        SyncInit();
+        StartCoroutine(SyncInit());
         NetManager.AddEventListener(NetManager.NetEvent.Close, OnConnectClose);
         NetManager.AddMsgListener("MsgKick", OnMsgKick);
 
@@ -18,6 +18,7 @@ public class GameMain : MonoBehaviour
     {
         yield return ABManager.Instance.Init();
 
+        ResManager.Instance.Init();
         BattleManager.Init();
         MapManager.Init();
         BagManager.Instance.Init();
@@ -27,6 +28,7 @@ public class GameMain : MonoBehaviour
         BombManager.Instance.Init();
         ZombieManager.Instance.Init();
         LightManager.Instance.Init();
+        EventHandler.CallAfterLoadRes();
         EventHandler.CallOpenPanel(PanelType.Login);
     }
 

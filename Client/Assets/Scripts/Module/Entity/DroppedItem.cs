@@ -32,7 +32,16 @@ public class DroppedItem : MonoBehaviour
         transform.position = position;
         this.info = info;
         MeshRenderer = GetComponent<MeshRenderer>();
-        MeshRenderer.material = Resources.Load<Material>("Materials/" + info.type.ToString());
+        ObjType objType = info.type switch
+        {
+            BlockType.Grass => ObjType.MatGrass,
+            BlockType.Chest => ObjType.MatChest,
+            BlockType.Bomb => ObjType.MatBomb,
+            BlockType.Light => ObjType.MatLight,
+            BlockType.Dirt => ObjType.MatDirt,
+            _ => ObjType.None
+        };
+        MeshRenderer.material = ResManager.Instance.LoadResources<Material>(objType);
     }
 
     public void Lock()

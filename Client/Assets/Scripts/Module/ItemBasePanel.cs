@@ -5,13 +5,9 @@ public class ItemBasePanel : BasePanel
 {
     public Transform[] slots;
     public Item[] Items;
-    private GameObject ItemPrefab;
-    private GameObject DroppedPrefab;
 
     private void Start()
     {
-        ItemPrefab = ResManager.LoadResources<GameObject>("prefab_item");
-        DroppedPrefab = ResManager.LoadResources<GameObject>("prefab_droppeditem");
         InitSlot();
     }
 
@@ -59,10 +55,11 @@ public class ItemBasePanel : BasePanel
     public void RrefreshBag(Slot slot)
     {
         Debug.Log("RefreshBag " + slot.item.type.ToString() + " at " + slot.idx);
-        if (Items[slot.idx] == null)
+        if (Items[slot.idx] == null || !Items[slot.idx].gameObject.activeSelf)
         {
             Debug.Log("It's null, Ins again");
-            Item newItem = Instantiate(ItemPrefab, slots[slot.idx]).GetComponent<Item>();
+            GameObject go = ResManager.Instance.GetGameObject(ObjType.Item, slots[slot.idx]);
+            Item newItem = go.GetComponent<Item>();
             Items[slot.idx] = newItem;
         }
         Items[slot.idx].Refresh(slot.item.type, slot.item.count);
@@ -70,7 +67,7 @@ public class ItemBasePanel : BasePanel
 
     public override void OnInit()
     {
-        base.OnInit();
+        
     }
 
     public override void OnShow()

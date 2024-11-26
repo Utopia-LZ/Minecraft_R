@@ -31,7 +31,7 @@ public class ABManager : MonoSingleton<ABManager>
         get
         {
 #if UNITY_EDITOR || UNITY_STANDALONE
-            return Application.streamingAssetsPath;
+            return Application.streamingAssetsPath + '/' + mainABName + '/';
 #elif UNITY_IPHONE
             return Application.dataPath + "/Raw/";
 #elif UNITY_ANDROID
@@ -60,7 +60,7 @@ public class ABManager : MonoSingleton<ABManager>
         get
         {
 #if UNITY_EDITOR || UNITY_STANDALONE
-            return "StreamingAssets";
+            return "StandaloneWindows";
 #elif UNITY_IPHONE
             return "IOS";
 #elif UNITY_ANDROID
@@ -82,8 +82,10 @@ public class ABManager : MonoSingleton<ABManager>
             using (StreamReader sr = new StreamReader(fs))
             {
                 string line;
-                while((line = sr.ReadLine()) != "")
+                while (true)
                 {
+                    line = sr.ReadLine();
+                    if (line == null || line == "") break;
                     string[] parts = line.Split(':');
                     clientDic[parts[0]] = parts[1];
                 }               
@@ -114,6 +116,7 @@ public class ABManager : MonoSingleton<ABManager>
                 updateList.Add(fm);
             }
         }
+
         foreach (FileMD5 fm in updateList)
         {
             yield return UpdateResources(fm.name);

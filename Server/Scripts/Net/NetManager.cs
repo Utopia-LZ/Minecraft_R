@@ -173,12 +173,6 @@ class NetManager
         //解析协议体
         int bodyCount = bodyLength - nameCount;        
         MsgBase msgBase = MsgBase.Decode(protoName, readBuff.bytes, readBuff.readIdx, bodyCount);
-        if(readBuff.Length < bodyCount) //:temp
-        {
-            Console.WriteLine("****Really got problem");
-            readBuff.readIdx -= nameCount + 2;
-            return;
-        }
         readBuff.readIdx += bodyCount;
         readBuff.CheckAndMoveBytes();
         //分发消息

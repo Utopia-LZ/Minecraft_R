@@ -11,7 +11,20 @@ using System.Collections.Generic;
 /// </summary>
 public class BuildAssetBundle
 {
-    private static string assetPath = Application.streamingAssetsPath;
+    private static string mainABName
+    {
+        get
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            return "/StandaloneWindows/";
+#elif UNITY_IPHONE
+            return "/IOS/";
+#elif UNITY_ANDROID
+            return "/Android/";
+#endif
+        }
+    }
+    private static string assetPath = Application.streamingAssetsPath + mainABName;
 
     /// <summary>
     /// 打包生成所有的AssetBundles（包）
@@ -46,7 +59,7 @@ public class BuildAssetBundle
             string md5 = BuildFileMd5(filePath);
             sb.Append(name + ":" + md5 + "\n");
         }
-        string updatePath = Path.Combine(Application.streamingAssetsPath, "update.txt");
+        string updatePath = Path.Combine(assetPath, "update.txt");
         WriteTXT(updatePath, sb.ToString());
     }
 

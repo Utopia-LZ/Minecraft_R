@@ -4,20 +4,19 @@ using UnityEngine;
 public class ItemManager : Singleton<ItemManager>
 {
     public Dictionary<int, DroppedItem> DroppedItems;
-    private GameObject DroppedPrefab;
 
     public void Init()
     {
         NetManager.AddMsgListener("MsgDropItem", OnMsgDropItem);
         NetManager.AddMsgListener("MsgDestroyItem",OnMsgDestroyItem);
         NetManager.AddMsgListener("MsgLoadDropped", OnMsgLoadDropped);
-        DroppedPrefab = ResManager.LoadResources<GameObject>("prefab_droppeditem");
         DroppedItems = new();
     }
 
     public DroppedItem InstantiateItem(int id, ItemInfo info, Vector3 position, Vector3 direction, bool locked = false) //:Î»ÖÃ²»Ì«Í×
     {
-        DroppedItem item = MonoBehaviour.Instantiate(DroppedPrefab).GetComponent<DroppedItem>();
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.Dropped);
+        DroppedItem item = go.GetComponent<DroppedItem>();
 
         if (locked) item.Lock();
         if (direction != Vector3.zero)
@@ -61,7 +60,8 @@ public class ItemManager : Singleton<ItemManager>
         {
             if (msg.pickedup && msg.id == GameMain.id)
                 BagManager.Instance.AddItem(DroppedItems[msg.idx].info);
-            GameObject.Destroy(DroppedItems[msg.idx].gameObject);
+            //GameObject.Destroy();
+            ResManager.Instance.RecycleObj(DroppedItems[msg.idx].gameObject, ObjType.Dropped);
             DroppedItems.Remove(msg.idx);
         }
     }

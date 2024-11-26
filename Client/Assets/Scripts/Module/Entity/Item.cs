@@ -25,14 +25,25 @@ public class Item : MonoBehaviour
 
     public void Refresh(BlockType type, int delta = 0)
     {
-        string resName = "icon_" + type.ToString().ToLower();
-        Icon.sprite = ResManager.LoadResources<Sprite>(resName);
+        ObjType objType = type switch
+        {
+            BlockType.Grass => ObjType.IconGrass,
+            BlockType.Chest => ObjType.IconChest,
+            BlockType.Bomb => ObjType.IconBomb,
+            BlockType.Light => ObjType.IconLight,
+            BlockType.Carrion => ObjType.IconCarrion,
+            _ => ObjType.None
+        };
+        Icon.sprite = ResManager.Instance.LoadResources<Sprite>(objType);
         count += delta;
+        Debug.Log("Count: " + count + " Delta: " + delta);
         this.type = type;
         Count.text = count.ToString();
         if (count <= 0)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            ResManager.Instance.RecycleObj(gameObject, ObjType.Item);
+            Debug.Log("Recycle Item");
         }
     }
     

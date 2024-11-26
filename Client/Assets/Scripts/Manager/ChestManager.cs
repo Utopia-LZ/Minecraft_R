@@ -35,7 +35,7 @@ public class ChestManager : Singleton<ChestManager>
 
     public void AddChest(int idx, Vector3Int corner)
     {
-        GameObject go = ResManager.InstantiatePrefab("prefab_chest");
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.Chest);
         go.transform.position = corner.ToVector3() + new Vector3(0.5f, 0.5f, 0.5f);
         Chest newChest = go.GetComponent<Chest>();
         Chests[idx] = newChest;
@@ -46,8 +46,10 @@ public class ChestManager : Singleton<ChestManager>
     {
         if (Chests.ContainsKey(idx))
         {
-            GameObject.Destroy(Chests[idx].ChestPanel);
-            GameObject.Destroy(Chests[idx].gameObject);
+            //GameObject.Destroy(Chests[idx].ChestPanel);
+            //GameObject.Destroy(Chests[idx].gameObject);
+            ResManager.Instance.RecycleObj(Chests[idx].ChestPanel.gameObject, ObjType.ChestPanel);
+            ResManager.Instance.RecycleObj(Chests[idx].gameObject, ObjType.Chest);
             Chests.Remove(idx);
         }
         else { Debug.Log("Chest doesn't exist! " + idx); }
@@ -89,8 +91,10 @@ public class ChestManager : Singleton<ChestManager>
     {
         foreach(var chest in Chests.Values)
         {
-            GameObject.Destroy(chest.ChestPanel.gameObject);
-            GameObject.Destroy(chest.gameObject);
+            //GameObject.Destroy(chest.ChestPanel.gameObject);
+            //GameObject.Destroy(chest.gameObject);
+            ResManager.Instance.RecycleObj(chest.ChestPanel.gameObject, ObjType.ChestPanel);
+            ResManager.Instance.RecycleObj(chest.gameObject, ObjType.Chest);
         }
         Chests.Clear();
     }

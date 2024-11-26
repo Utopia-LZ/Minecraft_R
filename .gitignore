@@ -8,6 +8,11 @@
 # Build results
 Client/Build/
 
+# simulated path
+Client/StreamingAssets/
+Client/persistentDataPath/
+Client/ServerSrc/
+
 # Auto-generated files by Unity3D
 [Ll]ibrary/
 [Tt]emp/
@@ -30,7 +35,7 @@ Client/UserSettings/
 Server/bin/
 Server/obj/
 
-/# 忽略 NuGet 包缓存
+# 忽略 NuGet 包缓存
 Server/packages/
 
 # 忽略 Visual Studio 配置文件
@@ -51,3 +56,6 @@ Server/packages/
 
 # 忽略发布时生成的文件
 /publish/
+
+# dll
+Server/Plugins/

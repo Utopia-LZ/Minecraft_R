@@ -4,7 +4,6 @@ using UnityEngine;
 public class ZombieManager : Singleton<ZombieManager>
 {
     public Dictionary<string, Zombie> Zombies;
-    private GameObject ZombiePrefab;
 
     public void Init()
     {
@@ -13,14 +12,13 @@ public class ZombieManager : Singleton<ZombieManager>
         NetManager.AddMsgListener("MsgZombieAttack", OnMsgZombieAttack);
         NetManager.AddMsgListener("MsgZombieHit", OnMsgZombieHit);
         NetManager.AddMsgListener("MsgLoadZombie", OnMsgLoadZombie);
-        ZombiePrefab = ResManager.LoadResources<GameObject>("prefab_zombie");
         Zombies = new();
     }
 
     public void Generate(CharacterInfo info)
     {
         Debug.Log("Info.position after trans:" + Vector3Int.V3IntToV3(info.pos));
-        GameObject go = MonoBehaviour.Instantiate(ZombiePrefab);
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.Zombie);
         go.transform.position = Vector3Int.V3IntToV3(info.pos);
         Zombie zombie = go.GetComponent<Zombie>();
         zombie.id = info.id;
@@ -34,7 +32,9 @@ public class ZombieManager : Singleton<ZombieManager>
     {
         foreach(var zombie in Zombies.Values)
         {
-            GameObject.Destroy(zombie.gameObject);
+            //GameObject.Destroy(zombie.gameObject);
+            zombie.OnRecycle();
+            ResManager.Instance.RecycleObj(zombie.gameObject, ObjType.Zombie);
         }
         Zombies.Clear();
     }
@@ -63,7 +63,9 @@ public class ZombieManager : Singleton<ZombieManager>
         {
             if (Zombies.ContainsKey(msg.info.id))
             {
-                GameObject.Destroy(Zombies[msg.info.id].gameObject);
+                //GameObject.Destroy(Zombies[msg.info.id].gameObject);
+                Zombies[msg.info.id].OnRecycle();
+                ResManager.Instance.RecycleObj(Zombies[msg.info.id].gameObject, ObjType.Zombie);
                 Zombies.Remove(msg.info.id);    
             }
         }

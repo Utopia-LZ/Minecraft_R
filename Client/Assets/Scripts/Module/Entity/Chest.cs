@@ -4,16 +4,15 @@ using static UnityEngine.UI.GridLayoutGroup;
 public class Chest : MonoBehaviour
 {
     public ChestPanel ChestPanel;
-    private GameObject PanelPrefab;
     private Transform Root;
 
     public int index;
 
     private void Start()
     {
-        PanelPrefab = ResManager.LoadResources<GameObject>("prefab_chestpanel");
         Root = GameObject.Find("Panel").transform;
-        ChestPanel = Instantiate(PanelPrefab, Root).GetComponent<ChestPanel>();
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.ChestPanel);
+        ChestPanel = go.GetComponent<ChestPanel>();
         ChestPanel.idx = index;
     }
 

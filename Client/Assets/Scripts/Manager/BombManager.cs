@@ -21,7 +21,7 @@ public class BombManager : Singleton<BombManager>
 
     public void AddBomb(int idx, Vector3Int corner)
     {
-        GameObject go = ResManager.InstantiatePrefab("prefab_bomb");
+        GameObject go = ResManager.Instance.GetGameObject(ObjType.Bomb);
         go.transform.position = corner.ToVector3() + new Vector3(0.5f,0.5f,0.5f);
         Bomb newBomb = go.GetComponent<Bomb>();
         Bombs[idx] = newBomb;
@@ -33,7 +33,8 @@ public class BombManager : Singleton<BombManager>
     {
         if (Bombs.ContainsKey(idx))
         {
-            GameObject.Destroy(Bombs[idx].gameObject);
+            //GameObject.Destroy(Bombs[idx].gameObject);
+            ResManager.Instance.RecycleObj(Bombs[idx].gameObject, ObjType.Bomb);
             Bombs.Remove(idx);
         }
         else { Debug.Log("Bomb doesn't exist! " + idx); }
@@ -43,7 +44,8 @@ public class BombManager : Singleton<BombManager>
     {
         foreach (var bomb in Bombs.Values)
         {
-            GameObject.Destroy(bomb.gameObject);
+            //GameObject.Destroy(bomb.gameObject);
+            ResManager.Instance.RecycleObj(bomb.gameObject, ObjType.Bomb);
         }
         Bombs.Clear();
     }

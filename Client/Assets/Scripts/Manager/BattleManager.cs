@@ -53,9 +53,10 @@ public class BattleManager
     public static void Reset()
     {
         //³¡¾°
-        foreach (BaseSteve tank in characters.Values)
+        foreach (BaseSteve steve in characters.Values)
         {
-            MonoBehaviour.Destroy(tank.gameObject);
+            //MonoBehaviour.Destroy(steve.gameObject);
+            ResManager.Instance.RecycleObj(steve.gameObject, ObjType.Steve);
         }
         //ÁÐ±í
         characters.Clear();
@@ -90,7 +91,7 @@ public class BattleManager
     public static void GenerateSteve(CharacterInfo tankInfo)
     {
         //GameObject
-        GameObject steveObj = ResManager.InstantiatePrefab("prefab_steve");
+        GameObject steveObj = ResManager.Instance.GetGameObject(ObjType.Steve);
         steveObj.name = "Steve_" + tankInfo.id;
         //AddComponent
         BaseSteve steve = null;
@@ -164,7 +165,8 @@ public class BattleManager
             EventHandler.CallOpenPanel(PanelType.RoomList);
             foreach (var player in characters.Values)
             {
-                MonoBehaviour.Destroy(player.gameObject);
+                //MonoBehaviour.Destroy(player.gameObject);
+                ResManager.Instance.RecycleObj(player.gameObject, ObjType.Steve);
             }
             characters.Clear();
             if (msg.reason == 1)
@@ -176,7 +178,8 @@ public class BattleManager
         {
             if (characters.ContainsKey(msg.id))
             {
-                GameObject.Destroy(characters[msg.id].gameObject);
+                //GameObject.Destroy(characters[msg.id].gameObject);
+                ResManager.Instance.RecycleObj(characters[msg.id].gameObject, ObjType.Steve);
                 characters.Remove(msg.id);
             }
         }
