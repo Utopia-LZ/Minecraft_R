@@ -23,7 +23,17 @@ public class ABManager : MonoSingleton<ABManager>
 
     public GameObject waitPanel;
 
-    public readonly string serverUrl = "file://" + Application.dataPath + "/ServerSrc/";
+    private string serverUrl
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return "file://" + Application.dataPath + "/ServerSrc/";
+#else
+            return "file://C:/Users/33572/Desktop/Minecraft_R/Client/Build/ServerSrc/";
+#endif
+        }
+    }
 
     //各个平台下的基础路径 --- 利用宏判断当前平台下的streamingAssets路径
     private string basePath
@@ -45,10 +55,10 @@ public class ABManager : MonoSingleton<ABManager>
     {
         get
         {
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
             return Application.dataPath + "/persistentDataPath/";
 #else
-            return Application.persistentDataPath;
+            return Application.persistentDataPath + '/';
 #endif
         }
     }
@@ -77,7 +87,7 @@ public class ABManager : MonoSingleton<ABManager>
 
     IEnumerator CheckAndUpdateResources()
     {
-        using(FileStream fs = File.OpenRead(persistentPath + "update.txt"))
+        using (FileStream fs = File.OpenRead(persistentPath + "update.txt"))
         {
             using (StreamReader sr = new StreamReader(fs))
             {
@@ -100,7 +110,6 @@ public class ABManager : MonoSingleton<ABManager>
             Debug.LogError("Failed to load file: " + request.error);
             yield break;
         }
-
         string fileContents = request.downloadHandler.text;
         string[] lines = fileContents.Split('\n',System.StringSplitOptions.RemoveEmptyEntries);
         List<FileMD5> updateList = new List<FileMD5>();
