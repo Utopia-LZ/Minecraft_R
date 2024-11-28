@@ -79,7 +79,7 @@ public class ZombieManager
         Zombie zombie = new(pos,room.id)
         {
             id = index.ToString(),
-            hp = 10,
+            hp = Zombie.HP,
             Kind = Kind.Zombie,
         };
         index++;

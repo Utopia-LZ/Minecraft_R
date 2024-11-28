@@ -7,6 +7,9 @@ public class CtrlSteve : BaseSteve
     public static float actInterval = 0.2f; //攻击间隔
     public static float actDistance = 15f;
     public static float jumpForce = 6f;
+    public static float WalkSpeed;
+    public static float RunSpeed;
+    public static float RotateSpeed;
 
     private float lastSendSyncTime = 0; //上一次发送同步信息的时间
     private float actTimer = 0.1f;

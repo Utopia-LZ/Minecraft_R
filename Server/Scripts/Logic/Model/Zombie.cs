@@ -2,6 +2,7 @@
 {
     public StateMachine sm;
     public Player ChasedPlayer;
+    public static int HP;
     public static int frameCount = 20; //插帧
     public static int attackDisSquared = 2 * 1 * 100 * 100;
     public static int chaseDisSquared = 10 * 10 * 100 * 100;
@@ -36,6 +37,7 @@
 
     public static void InitConfig(Config config)
     {
+        HP = config.ZombieHp;
         frameCount = config.FrameCount;
         attackDisSquared = config.ZombieAttackDis * config.ZombieAttackDis * 100 * 100;
         chaseDisSquared = config.ZombieChaseDis * config.ZombieChaseDis * 100 * 100;

@@ -18,7 +18,6 @@ public class GameMain : MonoBehaviour
     {
         yield return DataManager.Instance.Init();
         yield return ABManager.Instance.Init();
-
         ResManager.Instance.Init();
         BattleManager.Init();
         MapManager.Init();

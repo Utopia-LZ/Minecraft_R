@@ -1,13 +1,10 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
-using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 
 public class DBManager
 {
     public static MySqlConnection mysql;
-    static JavaScriptSerializer Js = new();
 
     public static bool Connect(string db, string ip, int port, string username, string password)
     {
@@ -170,8 +167,9 @@ public class DBManager
     }
     public static bool UpdatePlayerData(string id, PlayerData playerData)
     {
+        if (playerData == null) return false;
         //序列化
-        string data = Js.Serialize(playerData);
+        string data = JsonConvert.SerializeObject(playerData);
         //sql
         string sql = string.Format("update player set data='{0}' where id ='{1}';", data, id);
         //更新
@@ -183,6 +181,7 @@ public class DBManager
         }
         catch (Exception e)
         {
+            Console.WriteLine(data);
             Console.WriteLine("[数据库] UpdatePlayerData err, " + e.Message);
             return false;
         }

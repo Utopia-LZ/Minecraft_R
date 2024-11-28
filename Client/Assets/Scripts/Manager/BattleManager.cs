@@ -25,6 +25,11 @@ public class BattleManager
         CtrlSteve.actInterval = config.ActInterval;
         CtrlSteve.actDistance = config.ActDistance;
         CtrlSteve.jumpForce = config.JumpForce;
+        CtrlSteve.WalkSpeed = config.WalkSpeed;
+        CtrlSteve.RunSpeed = config.RunSpeed;
+        CtrlSteve.RotateSpeed = config.RotateSpeed;
+        BaseSteve.HP = config.PlayerHp;
+        BaseSteve.Damage = config.PlayerDamage;
 }
 
     //Ìí¼ÓÍæ¼Ò

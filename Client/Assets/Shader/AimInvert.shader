@@ -3,6 +3,7 @@ Shader "Custom/AimInvert"
     Properties 
     {
         _Color ("Color", Color) = (1,1,1,1)
+        _MainTex ("Base (RGB)", 2D) = "white" { }
     }
     SubShader 
     {
@@ -17,6 +18,8 @@ Shader "Custom/AimInvert"
             #pragma vertex vert
             #pragma fragment frag
             #pragma target 3.0 Alpha:Blend
+
+            sampler2D _MainTex;
 
             struct appdata
             {
@@ -39,7 +42,6 @@ Shader "Custom/AimInvert"
                 o.uv = v.uv;
                 return o;
             }
-        
             fixed4 frag (v2f i) : SV_Target
             {
                 return _Color;

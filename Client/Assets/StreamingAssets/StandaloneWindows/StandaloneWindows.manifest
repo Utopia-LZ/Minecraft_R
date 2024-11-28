@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 3778416835
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: prefab
+      Dependencies:
+        Dependency_0: mat
+        Dependency_1: icon
+    Info_1:
+      Name: mat
+      Dependencies:
+        Dependency_0: block
+    Info_2:
+      Name: icon
+      Dependencies: {}
+    Info_3:
+      Name: block
+      Dependencies: {}

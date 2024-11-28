@@ -78,7 +78,6 @@ public class DataManager : Singleton<DataManager>
             yield break;
         }
         string json = request.downloadHandler.text;
-        Debug.Log("Get json: " + json);
         Config = JsonUtility.FromJson<Config>(json);
     }
 }

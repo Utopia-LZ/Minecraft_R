@@ -3,11 +3,13 @@ using System.Numerics;
 
 public class Player
 {
-    public static int safeDistance = 4;
-    public static int ignoreDistance = 10; //(block scale)
+    public static int HP;
+    public static int safeDistance;
+    public static int ignoreDistance; //(block scale)
 
     public static void InitConfig(Config config)
     {
+        HP = config.PlayerHp;
         safeDistance = config.ZombieRefreshMinDis;
         ignoreDistance = config.ZombieRefreshMaxDis;
     }
@@ -20,6 +22,7 @@ public class Player
     public Player(ClientState state)
     {
         this.state = state;
+        hp = HP;
     }
     //坐标和旋转
     public Vector3Int pos;
@@ -27,7 +30,7 @@ public class Player
     //在哪个房间
     public int roomId = -1;
     //玩家生命值
-    public int hp = 10;
+    public int hp;
     //生物种类
     public Kind Kind = Kind.None;
 

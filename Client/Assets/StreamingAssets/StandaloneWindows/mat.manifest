@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 908736935
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cd551977943aea4b2f0303f4a9018eeb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: cd551977943aea4b2f0303f4a9018eeb
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Materials/mat_bomb.mat
+- Assets/Materials/mat_chest.mat
+- Assets/Materials/mat_dirt.mat
+- Assets/Texture/3123_n.png
+- Assets/Materials/mat_aim.mat
+- Assets/Materials/mat_carrion.mat
+- Assets/Texture/3124.png
+- Assets/Materials/mat_grass.mat
+- Assets/Materials/mat_light.mat
+- Assets/Materials/mat_chunk.mat
+- Assets/Shader/AimInvert.shader
+Dependencies:
+- C:/Users/33572/Desktop/Minecraft_R/Src/AssetBundles/StandaloneWindows/block

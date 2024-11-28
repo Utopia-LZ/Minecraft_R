@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class BaseSteve : MonoBehaviour
 {
+    public static int HP;
+    public static int Damage;
+
     public float walkSpeed;
     public float runSpeed;
     public float rotateSpeed;
@@ -17,11 +20,11 @@ public class BaseSteve : MonoBehaviour
     public virtual void Init()
     {
         rb = GetComponent<Rigidbody>();
-        walkSpeed = 10f;
-        runSpeed = 20f;
-        rotateSpeed = 40f;
-        damage = 1;
-        maxHP = 10f;
+        walkSpeed = CtrlSteve.WalkSpeed;
+        runSpeed = CtrlSteve.RunSpeed;
+        rotateSpeed = CtrlSteve.RotateSpeed;
+        damage = Damage;
+        maxHP = HP;
     }
 
     public bool IsDie()

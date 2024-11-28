@@ -5,12 +5,9 @@ using Newtonsoft.Json;
 public class MsgBase
 {
     public string protoName = "null";
-    //±àÂëÆ÷
-    static JavaScriptSerializer Js = new JavaScriptSerializer();
     //±àÂë
     public static byte[] Encode(MsgBase msgBase)
     {
-        //string s = Js.Serialize(msgBase);
         string s = JsonConvert.SerializeObject(msgBase);
         return System.Text.Encoding.UTF8.GetBytes(s);
     }
@@ -19,7 +16,6 @@ public class MsgBase
     public static MsgBase Decode(string protoName, byte[] bytes, int offset, int count)
     {
         string s = System.Text.Encoding.UTF8.GetString(bytes, offset, count);
-        //MsgBase msgBase = (MsgBase)Js.Deserialize(s, Type.GetType(protoName));
         Type type = Type.GetType(protoName);
         MsgBase msgBase = (MsgBase)JsonConvert.DeserializeObject(s,type);
         return msgBase;

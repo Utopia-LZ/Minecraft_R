@@ -20,6 +20,7 @@ public class ABManager : MonoSingleton<ABManager>
     private AssetBundle mainAB = null; //主包
     private AssetBundleManifest mainManifest = null; //主包中配置文件---用以获取依赖包
     private Dictionary<string, string> clientDic = new();
+    private int curVersion;
 
     public GameObject waitPanel;
 
@@ -28,9 +29,9 @@ public class ABManager : MonoSingleton<ABManager>
         get
         {
 #if UNITY_EDITOR
-            return DataManager.Instance.Config.LocalSrcUrl;
+            return DataManager.Instance.Config.LocalSrcUrl + mainABName + '/';
 #else
-            return DataManager.Instance.Config.ServerSrcUrl;
+            return DataManager.Instance.Config.ServerSrcUrl + mainABName + '/';
 #endif
         }
     }
@@ -81,27 +82,59 @@ public class ABManager : MonoSingleton<ABManager>
 
     public IEnumerator Init()
     {
-        CopyDirectory(basePath, persistentPath);
+        EventHandler.OnAfterLoadRes += CloseLoadPanel;
+        CheckAndCopyDirectory(basePath, persistentPath);
         yield return CheckAndUpdateResources();
+    }
+
+    //将资源文件从只读路径拷贝到读写路径
+    private void CheckAndCopyDirectory(string srcPath, string desPath)
+    {
+        // 如果目标目录不存在，则创建它
+        if (!Directory.Exists(desPath))
+        {
+            Directory.CreateDirectory(desPath);
+        }
+
+        string text;
+        if (File.Exists(desPath + "update.txt"))
+        {
+            text = File.ReadAllText(desPath + "update.txt");
+            curVersion = int.Parse(text.Split('\n')[0]);
+        }
+        text = File.ReadAllText(srcPath + "update.txt");
+        int buildinVersion = int.Parse(text.Split('\n')[0]);
+        Debug.Log("CurV: " + curVersion + " buildV: " + buildinVersion);
+        //当前版本低于内置版本，则拷贝
+        if (curVersion < buildinVersion)
+        {
+            curVersion = buildinVersion;
+            // 获取源目录中的所有文件
+            string[] files = Directory.GetFiles(srcPath);
+            foreach (string file in files)
+            {
+                // 获取文件名并构建目标路径
+                if (file.EndsWith(".meta")) continue;
+                string fileName = Path.GetFileName(file);
+                string destFile = Path.Combine(desPath, fileName);
+
+                // 拷贝文件到目标目录
+                File.Copy(file, destFile, true);  // 设置true表示如果文件已存在则覆盖
+            }
+        }
+
+        text = File.ReadAllText(desPath + "update.txt");
+        string[] lines = text.Split("\n");
+        for (int i = 1; i < lines.Length; i++)
+        {
+            if (lines[i] == null || lines[i] == "") continue;
+            string[] parts = lines[i].Split(':');
+            clientDic[parts[0]] = parts[1];
+        }
     }
 
     IEnumerator CheckAndUpdateResources()
     {
-        using (FileStream fs = File.OpenRead(persistentPath + "update.txt"))
-        {
-            using (StreamReader sr = new StreamReader(fs))
-            {
-                string line;
-                while (true)
-                {
-                    line = sr.ReadLine();
-                    if (line == null || line == "") break;
-                    string[] parts = line.Split(':');
-                    clientDic[parts[0]] = parts[1];
-                }               
-            }
-        }
-
         UnityWebRequest request = UnityWebRequest.Get(serverUrl + "update.txt");
         yield return request.SendWebRequest();
 
@@ -114,13 +147,18 @@ public class ABManager : MonoSingleton<ABManager>
         string fileContents = request.downloadHandler.text;
         string[] lines = fileContents.Split('\n',System.StringSplitOptions.RemoveEmptyEntries);
         List<FileMD5> updateList = new List<FileMD5>();
+        int serverVersion = int.Parse(lines[0]);
+        Debug.Log("CurV: " + curVersion + " serV: " + serverVersion);
+        if (curVersion >= serverVersion) yield break;
 
-        foreach (string line in lines)
+        for (int i = 1; i < lines.Length; i++)
         {
-            string[] parts = line.Split(':');
-            FileMD5 fm = new FileMD5();
-            fm.name = parts[0];
-            fm.md5 = parts[1];
+            string[] parts = lines[i].Split(':');
+            FileMD5 fm = new FileMD5
+            {
+                name = parts[0],
+                md5 = parts[1]
+            };
             if (!clientDic.ContainsKey(parts[0]) || clientDic[parts[0]] != parts[1])
             {
                 updateList.Add(fm);
@@ -131,15 +169,13 @@ public class ABManager : MonoSingleton<ABManager>
         {
             yield return UpdateResources(fm.name);
             clientDic[fm.name] = fm.md5;
+            Debug.Log("Update " +  fm.name);
         }
-
-        waitPanel.SetActive(false);
     }
 
     IEnumerator UpdateResources(string name)
     {
         // 第一步：从服务器下载新的 AssetBundle
-        Debug.Log("Server url: " + serverUrl + name);
         UnityWebRequest request = WebTool.Create(serverUrl + name);
         yield return request.SendWebRequest();
 
@@ -163,7 +199,6 @@ public class ABManager : MonoSingleton<ABManager>
 
             // 将下载的数据保存到本地
             File.WriteAllBytes(localPath, data);
-            Debug.Log("AssetBundle saved to: " + localPath);
         }
         catch (System.Exception e)
         {
@@ -171,27 +206,9 @@ public class ABManager : MonoSingleton<ABManager>
         }
     }
 
-    //拷贝文件
-    private void CopyDirectory(string srcPath, string desPath)
+    public void CloseLoadPanel()
     {
-        // 如果目标目录不存在，则创建它
-        if (!Directory.Exists(desPath))
-        {
-            Directory.CreateDirectory(desPath);
-        }
-
-        // 获取源目录中的所有文件
-        string[] files = Directory.GetFiles(srcPath);
-        foreach (string file in files)
-        {
-            // 获取文件名并构建目标路径
-            if (file.EndsWith(".meta")) continue;
-            string fileName = Path.GetFileName(file);
-            string destFile = Path.Combine(desPath, fileName);
-
-            // 拷贝文件到目标目录
-            File.Copy(file, destFile, true);  // 设置true表示如果文件已存在则覆盖
-        }
+        waitPanel.SetActive(false);
     }
 
     //加载AB包

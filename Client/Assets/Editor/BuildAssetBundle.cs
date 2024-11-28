@@ -23,6 +23,7 @@ public class BuildAssetBundle
         }
     }
     private static string assetPath = Application.streamingAssetsPath + mainABName;
+    private static string serverPath = "C:/Users/33572/Desktop/Minecraft_R/Src/AssetBundles/StandaloneWindows/";
 
     /// <summary>
     /// 打包生成所有的AssetBundles（包）
@@ -37,20 +38,19 @@ public class BuildAssetBundle
         }
 
         // 打包生成AB包 (目标平台根据需要设置即可)
-        BuildPipeline.BuildAssetBundles(assetPath, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
-
+        BuildPipeline.BuildAssetBundles(serverPath, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);
         Caching.ClearCache();
-
-        CreateUpdateTXT();
+        CreateUpdateTXT(serverPath);
+        CopyToStreamingAssets();
         AssetDatabase.Refresh();
     }
 
     // 创建更新文本
-    private static void CreateUpdateTXT()
+    private static void CreateUpdateTXT(string path)
     {
-        string[] files = Directory.GetFiles(assetPath);
+        string[] files = Directory.GetFiles(path);
         StringBuilder sb = new();
-        //sb.Append("1.0\n"); //版本号
+        sb.Append("2\n"); //版本号
         foreach (string filePath in files)
         {
             if (filePath.EndsWith(".meta") || filePath.EndsWith(".txt")) continue;
@@ -58,7 +58,7 @@ public class BuildAssetBundle
             string md5 = BuildFileMd5(filePath);
             sb.Append(name + ":" + md5 + "\n");
         }
-        string updatePath = Path.Combine(assetPath, "update.txt");
+        string updatePath = Path.Combine(path, "update.txt");
         WriteTXT(updatePath, sb.ToString());
     }
 
@@ -103,6 +103,22 @@ public class BuildAssetBundle
         catch (IOException e)
         {
             Debug.Log(e.Message);
+        }
+    }
+
+    private static void CopyToStreamingAssets()
+    {
+        // 获取源目录中的所有文件
+        string[] files = Directory.GetFiles(serverPath);
+        foreach (string file in files)
+        {
+            // 获取文件名并构建目标路径
+            if (file.EndsWith(".meta")) continue;
+            string fileName = Path.GetFileName(file);
+            string destFile = Path.Combine(assetPath, fileName);
+
+            // 拷贝文件到目标目录
+            File.Copy(file, destFile, true);  // 设置true表示如果文件已存在则覆盖
         }
     }
 }
