@@ -14,15 +14,14 @@ public class CameraFollow : MonoBehaviour
     public ViewType viewType = ViewType.Third;
 
     public Camera Camera;
-    public float speed = 6f;
-    public float thirdSpeed = 20f;
-    public float followSpeed = 6f;
+    public static float thirdSpeed = 20f;
+    public static float followSpeed = 6f;
     //距离变化速度
-    public float zoomSpeed = 2f;
+    public static float zoomSpeed = 2f;
 
-    public float radius = 5f;
-    private float maxRadius = 10f;
-    private float minRadius = 2f;
+    public static float radius = 5f;
+    public static float maxRadius = 10f;
+    public static float minRadius = 2f;
     private float horizontalAngle = 0;
     private float verticalAngle = 0;
     private Vector3 cameraOffset = Vector3.zero;

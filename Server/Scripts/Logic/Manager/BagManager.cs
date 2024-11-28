@@ -8,8 +8,14 @@ public struct ItemInfo
 
 public static class BagManager
 {
-    public static readonly int MAX_ITEM_COUNT = 64;
-    public static readonly int SLOT_COUNT = 45;
+    public static int MAX_ITEM_COUNT = 64;
+    public static int SLOT_COUNT = 45;
+
+    public static void InitConfig(Config config)
+    {
+        MAX_ITEM_COUNT = config.SlotMaxItemCount;
+        SLOT_COUNT = config.SlotCount;
+    }
 
     public static void LoadBagItem(Player player)
     {

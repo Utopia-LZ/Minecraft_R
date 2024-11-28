@@ -1,4 +1,9 @@
 ﻿public class Light : Entity
 {
-    public int radius;
+    public static int radius;
+
+    public static void InitConfig(Config config)
+    {
+        radius = config.LightRadius;
+    }
 }

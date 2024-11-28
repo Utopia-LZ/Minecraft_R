@@ -18,11 +18,11 @@ public enum BlockType : byte
 
 public class Chunk
 {
-    public static int width = 16;
-    public static int height = 20;
-    public static float baseHeight = 10;
-    public static float frequency = 0.025f;
-    public static float amplitude = 1;
+    public static int width;
+    public static int height;
+    public static int baseHeight;
+    public static float frequency;
+    public static float amplitude;
 
     public int Id;
     public Vector3Int position;
@@ -31,6 +31,15 @@ public class Chunk
     Vector3 offset0;
     Vector3 offset1;
     Vector3 offset2;
+
+    public static void InitConfig(Config config)
+    {
+        width = config.ChunkWidth;
+        height = config.ChunkHeight;
+        baseHeight = config.ChunkBaseHeight;
+        frequency = config.Frequency;
+        amplitude = config.Amplitude;
+    }
 
     public Chunk(int Id, Vector3Int position)
     {

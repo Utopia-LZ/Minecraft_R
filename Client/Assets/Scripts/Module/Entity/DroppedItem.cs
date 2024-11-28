@@ -17,7 +17,7 @@ public class DroppedItem : MonoBehaviour
     public int id = -1;
     public ItemInfo info;
     public float lockedTime = 0;
-    public static readonly float LockTime = 1f;
+    public static float LockTime = 1f;
 
     public float rotateSpeed = 50f;
 

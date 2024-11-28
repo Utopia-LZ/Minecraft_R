@@ -16,6 +16,7 @@ public class GameMain : MonoBehaviour
 
     IEnumerator SyncInit()
     {
+        yield return DataManager.Instance.Init();
         yield return ABManager.Instance.Init();
 
         ResManager.Instance.Init();

@@ -23,6 +23,8 @@ public class ChestManager : Singleton<ChestManager>
         Chests = new();
         EventHandler.OnRefreshChestPanel += RefreshChestPanel;
         NetManager.AddMsgListener("MsgLoadChestContent", OnMsgLoadChesetContent);
+
+        ChestPanel.CHEST_SLOT_COUNT = DataManager.Instance.Config.ChestSlotCount;
     }
 
     public void Select(int idx)

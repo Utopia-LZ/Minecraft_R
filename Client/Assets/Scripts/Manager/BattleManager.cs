@@ -19,7 +19,13 @@ public class BattleManager
         NetManager.AddMsgListener("MsgLeaveRoom", OnMsgLeaveRoom);
         NetManager.AddMsgListener("MsgSyncSteve", OnMsgSyncSteve);
         NetManager.AddMsgListener("MsgHit", OnMsgHit);
-    }
+
+        Config config = DataManager.Instance.Config;
+        CtrlSteve.syncInterval = config.SyncInterval;
+        CtrlSteve.actInterval = config.ActInterval;
+        CtrlSteve.actDistance = config.ActDistance;
+        CtrlSteve.jumpForce = config.JumpForce;
+}
 
     //Ìí¼ÓÍæ¼Ò
     public static void AddCharacter(string id, BaseSteve tank)

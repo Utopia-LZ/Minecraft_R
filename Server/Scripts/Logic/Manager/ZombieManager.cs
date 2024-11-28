@@ -4,7 +4,7 @@ public class ZombieManager
     public Dictionary<string, Zombie> Zombies = new Dictionary<string, Zombie>();
     public int index = 0;
 
-    public int generateCount = 60;
+    public static int generateCount;
     public int counter = 0;
     public Random rand;
     public Room room;
@@ -13,6 +13,7 @@ public class ZombieManager
     {
         this.room = room;
         rand = new Random();
+        generateCount = DataManager.Config.GenerateInterval;
     }
 
     public void Update()

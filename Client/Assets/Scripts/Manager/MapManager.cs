@@ -12,6 +12,10 @@ public class MapManager
         NetManager.AddMsgListener("MsgMapInit", OnMsgMapInit);
         NetManager.AddMsgListener("MsgMapChange", OnMsgMapChange);
         EventHandler.OnLeaveRoom += ClearMap;
+
+        Chunk.width = DataManager.Instance.Config.ChunkWidth;
+        Chunk.height = DataManager.Instance.Config.ChunkHeight;
+
         for(int i = 0; i < offsetX.Length; i++)
         {
             offsetX[i] *= Chunk.width;

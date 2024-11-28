@@ -17,6 +17,10 @@ public class LightManager : Singleton<LightManager>
 
     public void Init()
     {
+        NetManager.AddMsgListener("MsgTime", OnMsgTime);
+        CYCLE = DataManager.Instance.Config.CycleTime;
+        TICK = DataManager.Instance.Config.TickTime;
+
         paused = true;
         Lights = new Dictionary<int, Light>();
         GameObject go = GameObject.Find("Directional Light");
@@ -26,8 +30,6 @@ public class LightManager : Singleton<LightManager>
         timer.AutoReset = true;
         timer.Enabled = true;
         timer.Start();
-
-        NetManager.AddMsgListener("MsgTime", OnMsgTime);
     }
 
     public void Pause(bool paused)

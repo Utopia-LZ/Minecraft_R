@@ -28,9 +28,9 @@ public class ABManager : MonoSingleton<ABManager>
         get
         {
 #if UNITY_EDITOR
-            return "file://" + Application.dataPath + "/ServerSrc/";
+            return DataManager.Instance.Config.LocalSrcUrl;
 #else
-            return "file://C:/Users/33572/Desktop/Minecraft_R/Client/Build/ServerSrc/";
+            return DataManager.Instance.Config.ServerSrcUrl;
 #endif
         }
     }

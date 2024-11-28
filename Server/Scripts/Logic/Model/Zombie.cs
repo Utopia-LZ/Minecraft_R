@@ -2,9 +2,9 @@
 {
     public StateMachine sm;
     public Player ChasedPlayer;
-    public int frameCount = 20; //插帧
-    public int attackDidSquared = 2 * 1 * 100 * 100;
-    public int chaseDisSquared = 10 * 10 * 100 * 100;
+    public static int frameCount = 20; //插帧
+    public static int attackDisSquared = 2 * 1 * 100 * 100;
+    public static int chaseDisSquared = 10 * 10 * 100 * 100;
 
     //id
     public string id = "";
@@ -32,6 +32,13 @@
         this.pos = pos;
         this.roomId = roomId;
         sm = new(this);
+    }
+
+    public static void InitConfig(Config config)
+    {
+        frameCount = config.FrameCount;
+        attackDisSquared = config.ZombieAttackDis * config.ZombieAttackDis * 100 * 100;
+        chaseDisSquared = config.ZombieChaseDis * config.ZombieChaseDis * 100 * 100;
     }
 
     public void Update(Room room)

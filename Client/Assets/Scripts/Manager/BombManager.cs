@@ -17,6 +17,8 @@ public class BombManager : Singleton<BombManager>
     {
         Bombs = new();
         NetManager.AddMsgListener("MsgBombState",OnMsgBombState);
+
+        Bomb.radius = DataManager.Instance.Config.BombRadius;
     }
 
     public void AddBomb(int idx, Vector3Int corner)

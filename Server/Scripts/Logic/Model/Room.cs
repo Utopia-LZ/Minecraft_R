@@ -2,9 +2,9 @@
 
 public class Room
 {
-    public static int TICK = 50;
-    public static int CYCLE = 24000;
-    public static int DAY_TIME = CYCLE/2;
+    public static int TICK;
+    public static int CYCLE;
+    public static int DAY_TIME;
 
     //id
     public int id = 0;
@@ -38,6 +38,13 @@ public class Room
         timer.AutoReset = true;
         timer.Enabled = true;
         timer.Start();
+    }
+
+    public static void InitConfig(Config config)
+    {
+        TICK = config.TickTime;
+        CYCLE = config.CycleTime;
+        DAY_TIME = CYCLE / 2;
     }
 
     private void Update(object? sender, ElapsedEventArgs e)

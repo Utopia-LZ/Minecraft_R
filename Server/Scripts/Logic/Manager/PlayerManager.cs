@@ -5,6 +5,7 @@ public class PlayerManager
 {
     //玩家列表
     public static Dictionary<string, Player> players = new Dictionary<string, Player>();
+
     //玩家是否在线
     public static bool IsOnline(string id)
     {
@@ -47,7 +48,8 @@ public class PlayerManager
         {
             if(player.roomId != room.id) continue;
             Vector3Int position = new Vector3Int(player.pos.x, player.pos.y, player.pos.z);
-            if ((position - pos).Magnitude > Bomb.radius * Bomb.radius) continue;
+            int damge = (int)Math.Min(Bomb.damage - Math.Sqrt((position - pos).Magnitude) * Bomb.falloff, 0);
+            if (damge == 0) continue;
             player.hp -= Bomb.damage;
             MsgHit msg = new MsgHit();
             msg.id = player.id;

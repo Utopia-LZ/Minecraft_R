@@ -7,7 +7,7 @@
 
 public enum State
 {
-    None,Patrol,Chase,Attack
+    None,Chase,Attack
 }
 
 public class StateMachine
@@ -20,7 +20,6 @@ public class StateMachine
     public StateMachine(Zombie zombie)
     {
         this.Zombie = zombie;
-        States[State.Patrol] = new Patrol(Zombie);
         States[State.Chase] = new Chase(Zombie);
         States[State.Attack] = new Attack(Zombie);
         SwitchState(State.Chase);
@@ -42,7 +41,7 @@ public class StateMachine
             }
         }
 
-        if (distance < Zombie.attackDidSquared)
+        if (distance < Zombie.attackDisSquared)
         {
             if (curStateType != State.Attack)
                 SwitchState(State.Attack);

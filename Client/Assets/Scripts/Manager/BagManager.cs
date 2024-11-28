@@ -10,8 +10,8 @@ public struct ItemInfo
 
 public class BagManager:Singleton<BagManager>
 {
-    public static readonly int MAX_ITEM_COUNT = 64;
-    public static readonly int SLOT_COUNT = 45;
+    public static int MAX_ITEM_COUNT;
+    public static int SLOT_COUNT;
 
     public BagPanel BagPanel;
     public int SelectSlotIndex;
@@ -23,6 +23,16 @@ public class BagManager:Singleton<BagManager>
         NetManager.AddMsgListener("MsgAddItem",OnMsgAddItem);
         NetManager.AddMsgListener("MsgRemoveItem",OnMsgRemoveItem);
         NetManager.AddMsgListener("MsgLoadBag", OnMsgLoadBag);
+
+        Config config = DataManager.Instance.Config;
+        MAX_ITEM_COUNT = config.SlotMaxItemCount;
+        SLOT_COUNT = config.SlotCount;
+        CameraFollow.thirdSpeed = config.ThirdSpeed;
+        CameraFollow.followSpeed = config.FollowSpeed;
+        CameraFollow.zoomSpeed = config.ZoomSpeed;
+        CameraFollow.radius = config.CameraRadius;
+        CameraFollow.minRadius = config.CameraMinRadius;
+        CameraFollow.maxRadius = config.CameraMaxRadius;
     }
 
     public void AddItem(ItemInfo item) 

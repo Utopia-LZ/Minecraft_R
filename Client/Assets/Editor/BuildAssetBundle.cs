@@ -1,10 +1,8 @@
 using UnityEditor;
 using System.IO;
 using UnityEngine;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Collections.Generic;
 
 /// <summary>
 /// AssetBundle 打包工具
@@ -29,7 +27,7 @@ public class BuildAssetBundle
     /// <summary>
     /// 打包生成所有的AssetBundles（包）
     /// </summary>
-    [MenuItem("AssetBundleTools/BuildAllAssetBundles")]
+    [MenuItem("Tools/BuildAllAssetBundles")]
     public static void BuildAllAB()
     {
         // 判断文件夹是否存在，不存在则新建

@@ -2,7 +2,6 @@
 {
     public MapManager mapManager;
 
-    //public static Vector3Int offset = new Vector3Int(50,50,100);
     public static Vector3Int[] edgeOffset = new Vector3Int[5]
     {
         Vector3Int.Back,

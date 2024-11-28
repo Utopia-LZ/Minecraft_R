@@ -61,4 +61,8 @@ Server/packages/
 /publish/
 
 # dll
-#Server/Plugins/
+Plugins/
+Plugins.meta
+
+# local log
+/Log.txt

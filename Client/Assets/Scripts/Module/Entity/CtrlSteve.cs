@@ -4,12 +4,13 @@ using UnityEngine.EventSystems;
 public class CtrlSteve : BaseSteve
 {
     public static float syncInterval = 0.1f; //0.05f; //同步帧率
+    public static float actInterval = 0.2f; //攻击间隔
+    public static float actDistance = 15f;
+    public static float jumpForce = 6f;
+
     private float lastSendSyncTime = 0; //上一次发送同步信息的时间
-    private float actInterval = 0.2f; //攻击间隔
     private float actTimer = 0.1f;
-    private float maxDistance = 15f;
     public Vector3 viewOffset = Vector3.up * 0.5f;
-    public float jumpForce = 6f;
     public Vector3Int currentChunk;
 
     private int layerOwn;
@@ -145,7 +146,7 @@ public class CtrlSteve : BaseSteve
             Ray ray = new Ray(viewOffset+transform.position, direction);
             RaycastHit hit;
             // 如果射线碰撞到物体
-            if (Physics.Raycast(ray, out hit, maxDistance))
+            if (Physics.Raycast(ray, out hit, actDistance))
             {
                 // 输出射线与物体碰撞的点
                 int layer = hit.collider.gameObject.layer;
@@ -185,7 +186,7 @@ public class CtrlSteve : BaseSteve
             Vector3 direction = Camera.main.transform.forward;
             Ray ray = new Ray(viewOffset + transform.position, direction);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, maxDistance))
+            if (Physics.Raycast(ray, out hit, actDistance))
             {
                 int layer = hit.collider.gameObject.layer;
                 if (layer == layerTerrain)
@@ -267,7 +268,7 @@ public class CtrlSteve : BaseSteve
     {
         Gizmos.color = Color.red;
         Vector3 from = viewOffset + transform.position;
-        Vector3 to = from + Camera.main.transform.forward * maxDistance;
+        Vector3 to = from + Camera.main.transform.forward * actDistance;
         Gizmos.DrawLine(from, to);
     }
 }

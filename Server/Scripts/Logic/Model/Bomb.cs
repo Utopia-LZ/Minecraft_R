@@ -1,8 +1,9 @@
 ﻿public class Bomb : Entity
 {
-    public static int radius = 3;
-    public static float cd = 3f;
-    public static int damage = 2;
+    public static int radius;
+    public static float cd;
+    public static int damage;
+    public static int falloff;
 
     public void Burning(Player player)
     {

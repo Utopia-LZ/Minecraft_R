@@ -12,6 +12,14 @@ public static class BombManager
     public static Dictionary<int, Bomb> Bombs = new();
     public static int index = 0;
 
+    public static void InitConfig(Config config)
+    {
+        Bomb.radius = config.BombRadius;
+        Bomb.cd = config.BombBurnTime;
+        Bomb.damage = config.BombDamage;
+        Bomb.falloff = config.BombFalloff;
+    }
+
     public static void Ignite(int idx, Player player) //点燃炸弹
     {
         if (!Bombs.ContainsKey(idx)) return;

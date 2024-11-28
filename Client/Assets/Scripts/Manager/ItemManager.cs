@@ -11,6 +11,8 @@ public class ItemManager : Singleton<ItemManager>
         NetManager.AddMsgListener("MsgDestroyItem",OnMsgDestroyItem);
         NetManager.AddMsgListener("MsgLoadDropped", OnMsgLoadDropped);
         DroppedItems = new();
+
+        DroppedItem.LockTime = DataManager.Instance.Config.LockTime;
     }
 
     public DroppedItem InstantiateItem(int id, ItemInfo info, Vector3 position, Vector3 direction, bool locked = false) //:Î»ÖÃ²»Ì«Í×

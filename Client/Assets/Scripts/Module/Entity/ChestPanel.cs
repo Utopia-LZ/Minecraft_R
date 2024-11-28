@@ -3,7 +3,7 @@ using Pair = System.Collections.Generic.KeyValuePair<UnityEngine.Transform, Item
 
 public class ChestPanel: ItemBasePanel
 {
-    public static readonly int CHEST_SLOT_COUNT = 27;
+    public static int CHEST_SLOT_COUNT;
 
     public int idx = -1;
     public int Offset { get {  return idx+1000; } }

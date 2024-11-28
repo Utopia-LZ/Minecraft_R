@@ -1,9 +1,14 @@
 ﻿public static class ChestManager
 {
-    public static readonly int CHEST_SLOT_COUNT = 27;
+    public static int CHEST_SLOT_COUNT = 27;
 
     public static int index = 0;
     public static Dictionary<int, Chest> Chests = new();
+
+    public static void InitConfig(Config config)
+    {
+        CHEST_SLOT_COUNT = config.ChestSlotCount;
+    }
 
     public static void DestroyChest(int id, Vector3Int corner, Room room)
     {

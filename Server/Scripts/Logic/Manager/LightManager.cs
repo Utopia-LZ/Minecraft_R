@@ -53,7 +53,7 @@ public static class LightManager
         foreach(Light light in Lights.Values)
         {
             int delta = FindPath.GetManhattanDistance(light.position, position);
-            delta = light.radius - delta;
+            delta = Light.radius - delta;
             if(delta < 0) delta = 0;
             result += delta;
         }

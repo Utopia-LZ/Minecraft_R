@@ -1,7 +1,7 @@
 ﻿public class Attack : IState
 {
     public Zombie Zombie;
-    private int Interval = 40;
+    private static int attackInterval = 40;
     private int counter = 0;
     private Room room;
 
@@ -9,6 +9,7 @@
     {
         Zombie = zombie;
         room = RoomManager.GetRoom(Zombie.roomId);
+        attackInterval = DataManager.Config.ZombieAttackInterval;
     }
     public void OnEnter()
     {
@@ -18,7 +19,7 @@
     {
         if (Zombie.ChasedPlayer == null) return;
         counter++;
-        if(counter >= Interval)
+        if(counter >= attackInterval)
         {
             counter = 0;
             MsgZombieAttack msg = new MsgZombieAttack();

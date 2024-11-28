@@ -6,6 +6,12 @@ public class Player
     public static int safeDistance = 4;
     public static int ignoreDistance = 10; //(block scale)
 
+    public static void InitConfig(Config config)
+    {
+        safeDistance = config.ZombieRefreshMinDis;
+        ignoreDistance = config.ZombieRefreshMaxDis;
+    }
+
     //id
     public string id = "";
     //指向ClientState
