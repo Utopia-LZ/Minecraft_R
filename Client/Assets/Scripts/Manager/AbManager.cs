@@ -107,6 +107,7 @@ public class ABManager : MonoSingleton<ABManager>
 
         if (request.result != UnityWebRequest.Result.Success)
         {
+            Debug.Log("Url: " + serverUrl + "update.txt");
             Debug.LogError("Failed to load file: " + request.error);
             yield break;
         }
@@ -139,7 +140,7 @@ public class ABManager : MonoSingleton<ABManager>
     {
         // 第一步：从服务器下载新的 AssetBundle
         Debug.Log("Server url: " + serverUrl + name);
-        UnityWebRequest request = UnityWebRequest.Get(serverUrl + name);
+        UnityWebRequest request = WebTool.Create(serverUrl + name);
         yield return request.SendWebRequest();
 
         // 检查下载请求是否成功

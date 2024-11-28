@@ -50,6 +50,7 @@ public class BuildAssetBundle
     {
         string[] files = Directory.GetFiles(assetPath);
         StringBuilder sb = new();
+        //sb.Append("1.0\n"); //°æ±¾ºÅ
         foreach (string filePath in files)
         {
             if (filePath.EndsWith(".meta") || filePath.EndsWith(".txt")) continue;

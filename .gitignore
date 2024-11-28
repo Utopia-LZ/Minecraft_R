@@ -9,12 +9,8 @@
 Client/Build/
 
 # simulated path
-Client/Assets/StreamingAssets/
 Client/Assets/persistentDataPath/
-Client/Assets/ServerSrc/
-Client/Assets/StreamingAssets.meta
 Client/Assets/persistentDataPath.meta
-Client/Assets/ServerSrc.meta
 
 # Auto-generated files by Unity3D
 [Ll]ibrary/
@@ -66,3 +62,4 @@ Plugins.meta
 
 # local log
 /Log.txt
+/Src

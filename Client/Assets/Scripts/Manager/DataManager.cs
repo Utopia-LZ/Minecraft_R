@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine;
+using static System.Net.WebRequestMethods;
 
 [System.Serializable]
 public class Config
@@ -60,14 +61,15 @@ public class DataManager : Singleton<DataManager>
 #if UNITY_EDITOR
             return "file://C:/Users/33572/Desktop/Minecraft_R/Src/Config/config.txt";
 #else
-            return "https://github.com/Utopia-LZ/Minecraft_R/Src/Config/config.txt";
+            return "https://gitee.com/Utopia-lz/mc_src/raw/master/Config/config.txt";
 #endif
         }
     }
 
     public IEnumerator Init()
     {
-        UnityWebRequest request = UnityWebRequest.Get(dataPath);
+        Debug.Log("DataManager Init url: " + dataPath);
+        UnityWebRequest request = WebTool.Create(dataPath);
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -76,7 +78,7 @@ public class DataManager : Singleton<DataManager>
             yield break;
         }
         string json = request.downloadHandler.text;
-        Debug.Log(json);
+        Debug.Log("Get json: " + json);
         Config = JsonUtility.FromJson<Config>(json);
     }
 }

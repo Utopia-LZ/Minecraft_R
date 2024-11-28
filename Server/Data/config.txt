@@ -40,5 +40,5 @@
 	"BombRadius" : 3,
 	"BombFalloff" : 2,
 	"LocalSrcUrl" : "file://C:/Users/33572/Desktop/Minecraft_R/Src/Assetbundles/",
-	"ServerSrcUrl" : "https://github.com/Utoipa-LZ/Minecraft_R/Src/AssetBundles/"
+	"ServerSrcUrl" : "https://gitee.com/Utopia-lz/mc_src/raw/master/AssetBundles/"
 }
