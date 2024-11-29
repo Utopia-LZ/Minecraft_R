@@ -229,6 +229,21 @@ public class CtrlSteve : BaseSteve
                     hit.collider.gameObject.GetComponent<Bomb>().SendIgnite();
                 }
             }
+            else
+            {
+                Item useItem = BagManager.Instance.SelectSlot;
+                if(useItem != null && useItem.type == BlockType.Carrion)
+                {
+                    Debug.Log("Eat Carrion");
+                    MsgHungry msg = new MsgHungry();
+                    msg.id = id;
+                    msg.hunger = Zombie.RecoverHunger;
+                    msg.saturation = Zombie.RecoverSaturation;
+                    NetManager.Send(msg);
+                    BagManager.Instance.RemoveItem(1);
+                    BattleManager.RefreshHunger(Zombie.RecoverHunger);
+                }
+            }
         }
     }
 

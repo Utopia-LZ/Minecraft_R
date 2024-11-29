@@ -49,3 +49,14 @@ public class MsgHit : MsgBase
     public string id = ""; //被击中玩家id
     //服务端暂时无需返回
 }
+
+public class MsgHungry : MsgBase
+{
+    public MsgHungry() { protoName = "MsgHungry"; }
+
+    //Server -> Client掉一格饱食度
+    public string id = "";
+    //Client -> Server 恢复
+    public int hunger; //饥饿值
+    public int saturation; //饱食度
+}

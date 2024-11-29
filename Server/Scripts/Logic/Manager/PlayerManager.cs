@@ -1,33 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-
-public class PlayerManager
+﻿public class PlayerManager
 {
     //玩家列表
-    public static Dictionary<string, Player> players = new Dictionary<string, Player>();
+    public Dictionary<string, Player> players = new Dictionary<string, Player>();
+
+    public void Update(int roomId)
+    {
+        foreach(var player in players.Values)
+        {
+            if(player != null && player.roomId == roomId)
+                player.Update();
+        }
+    }
 
     //玩家是否在线
-    public static bool IsOnline(string id)
+    public bool IsOnline(string id)
     {
         return players.ContainsKey(id);
     }
     //获取玩家
-    public static Player GetPlayer(string id)
+    public Player GetPlayer(string id)
     {
-        return players[id];
+        if(players.ContainsKey(id))
+            return players[id];
+        return null;
     }
     //添加玩家
-    public static void AddPlayer(string id, Player player)
+    public void AddPlayer(Player player)
     {
-        players.Add(id, player);
+        players[player.id] = player;
     }
     //删除玩家
-    public static void RemovePlayer(string id)
+    public void RemovePlayer(string id)
     {
         players.Remove(id);
     }
 
-    public static Vector3Int GetCenterPosition(int roomId)
+    public Vector3Int GetCenterPosition(int roomId)
     {
         Vector3Int result = Vector3Int.Zero;
         int count = 0;
@@ -42,7 +50,7 @@ public class PlayerManager
         return result / count;
     }
 
-    public static void BombExplode(Vector3Int pos, Room room)
+    public void BombExplode(Vector3Int pos, Room room)
     {
         foreach(var player in players.Values)
         {

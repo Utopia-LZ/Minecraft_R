@@ -32,3 +32,14 @@ public class MsgUpdateZombie : MsgBase
     public CharacterInfo info;
     public bool generate = true;
 }
+
+public class MsgHungry : MsgBase
+{
+    public MsgHungry() { protoName = "MsgHungry"; }
+
+    //Server -> Client掉一格饱食度
+    public string id = "";
+    //Client -> Server 恢复
+    public int hunger; //饥饿值
+    public int saturation; //饱食度
+}

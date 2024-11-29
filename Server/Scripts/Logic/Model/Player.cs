@@ -4,12 +4,20 @@ using System.Numerics;
 public class Player
 {
     public static int HP;
+    public static int Hunger;
+    public static int Saturation;
+    public static int HungerInterval;
+    public static int StarveDamage;
     public static int safeDistance;
     public static int ignoreDistance; //(block scale)
 
     public static void InitConfig(Config config)
     {
         HP = config.PlayerHp;
+        Hunger = config.Hunger;
+        Saturation = config.Saturation;
+        HungerInterval = config.HungerInterval;
+        StarveDamage = config.StarveDamage;
         safeDistance = config.ZombieRefreshMinDis;
         ignoreDistance = config.ZombieRefreshMaxDis;
     }
@@ -23,6 +31,8 @@ public class Player
     {
         this.state = state;
         hp = HP;
+        hunger = Hunger;
+        saturation = Saturation;
     }
     //坐标和旋转
     public Vector3Int pos;
@@ -31,11 +41,41 @@ public class Player
     public int roomId = -1;
     //玩家生命值
     public int hp;
+    //玩家饥饿值
+    public int hunger;
+    public int saturation;
     //生物种类
     public Kind Kind = Kind.None;
 
     //数据库数据
     public PlayerData data;
+
+    public void Update()
+    {
+        Console.WriteLine("Player Update " + saturation);
+        if (saturation < 0)
+        {
+            saturation += HungerInterval;
+            if(hunger == 0)
+            {
+                MsgHit msg = new();
+                msg.id = id;
+                msg.damage = StarveDamage;
+                Send(msg);
+            }
+            else
+            {
+                hunger--;
+                MsgHungry msg = new MsgHungry();
+                msg.id = id;
+                Send(msg);
+            }
+        }
+        else
+        {
+            saturation--;
+        }
+    }
 
     public void TakeDamage(int damage)
     {

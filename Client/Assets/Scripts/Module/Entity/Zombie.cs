@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Zombie : BaseSteve, PoolObject
 {
+    public static int RecoverHunger;
+    public static int RecoverSaturation;
 
     public override void Init()
     {

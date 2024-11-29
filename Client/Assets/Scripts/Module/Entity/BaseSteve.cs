@@ -9,7 +9,7 @@ public class BaseSteve : MonoBehaviour
     public float runSpeed;
     public float rotateSpeed;
     public Rigidbody rb;
-    public float hp;
+    public int hp;
     public float maxHP;
     public int damage;
     public string id = "";
@@ -32,12 +32,12 @@ public class BaseSteve : MonoBehaviour
         return hp <= 0;
     }
 
-    public void Attacked(float damage)
+    public void Attacked(int damage)
     {
         hp -= damage;
         if(id == GameMain.id)
         {
-            EventHandler.CallHPChanged(hpRate);
+            EventHandler.CallHPChanged(hp);
         }
         else 
         {

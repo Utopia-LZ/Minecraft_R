@@ -11,7 +11,7 @@ public class Room
     //最大玩家数
     public int maxPlayer = 6;
     //玩家列表
-    public Dictionary<string, bool> playerIds = new Dictionary<string, bool>();
+    public Dictionary<string, bool> playerIds = new();
     //房主id
     public string ownerId = "";
     //暂停
@@ -25,12 +25,14 @@ public class Room
     public ChatManager chatManager;
     public MapManager mapManager;
     public ZombieManager zombieManager;
+    public PlayerManager playerManager;
 
     public Room()
     {
         chatManager = new ChatManager();
         mapManager = new MapManager();
         zombieManager = new ZombieManager(this);
+        playerManager = new PlayerManager();
         Time = 0;
         rand = new Random();
         timer = new System.Timers.Timer(TICK);
@@ -60,18 +62,12 @@ public class Room
         if (Time >= CYCLE) Time = 0;
 
         zombieManager.Update();
+        playerManager.Update(id);
     }
 
     //添加玩家
-    public bool AddPlayer(string id)
+    public bool AddPlayer(Player player)
     {
-        //获取玩家
-        Player player = PlayerManager.GetPlayer(id);
-        if (player == null)
-        {
-            Console.WriteLine("room.AddPlayer fail, player is null");
-            return false;
-        }
         //房间人数
         if (playerIds.Count >= maxPlayer)
         {
@@ -82,15 +78,14 @@ public class Room
         {
             paused = false;
         }
-        else if (playerIds.ContainsKey(id)) //已经在房间里
+        else if (playerIds.ContainsKey(player.id)) //已经在房间里
         {
             Console.WriteLine("room.AddPlayer fail, already in this room");
             return false;
         }
         //加入列表
-        playerIds[id] = true;
-        //设置玩家数据
-        //player.camp = SwitchCamp();
+        playerIds[player.id] = true;
+        playerManager.AddPlayer(player);
         player.roomId = this.id;
         //设置房主
         if (ownerId == "")
@@ -112,7 +107,7 @@ public class Room
     public bool RemovePlayer(string id)
     {
         //获取玩家
-        Player player = PlayerManager.GetPlayer(id);
+        Player player = playerManager.GetPlayer(id);
         if (player == null)
         {
             Console.WriteLine("room.RemovePlayer fail, player is null");
@@ -126,14 +121,10 @@ public class Room
         }
         //删除列表
         playerIds.Remove(id);
+        playerManager.RemovePlayer(id);
+        Console.WriteLine("RemovePlayer: " + id);
         //设置玩家数据
-        //player.camp = 0;
         player.roomId = -1; //:暂时表示在线状态 -1为离线
-        //设置房主
-        if (ownerId == player.id)
-        {
-            ownerId = SwitchOwner();
-        }
         //房间为空
         if (playerIds.Count == 0)
         {
@@ -160,8 +151,8 @@ public class Room
     {
         foreach (string id in playerIds.Keys)
         {
-            Player player = PlayerManager.GetPlayer(id);
-            player.Send(msg);
+            Player player = playerManager.GetPlayer(id);
+            player?.Send(msg);
         }
     }
 
@@ -175,7 +166,7 @@ public class Room
         int i = 0;
         foreach (string id in playerIds.Keys)
         {
-            Player player = PlayerManager.GetPlayer(id);
+            Player player = playerManager.GetPlayer(id);
             PlayerInfo playerInfo = new PlayerInfo();
             //赋值
             playerInfo.id = player.id;
@@ -224,14 +215,14 @@ public class Room
         //位置和旋转
         foreach (string id in playerIds.Keys)
         {
-            Player player = PlayerManager.GetPlayer(id);
+            Player player = playerManager.GetPlayer(id);
             SetBirthPos(player);
         }
         //生命值
         foreach (string id in playerIds.Keys)
         {
-            Player player = PlayerManager.GetPlayer(id);
-            player.hp = 10;
+            Player player = playerManager.GetPlayer(id);
+            player.hp = Player.HP;
         }
     }
 
@@ -247,14 +238,7 @@ public class Room
         //返回数据
         msg.mapId = 1;
         msg.characters = new CharacterInfo[playerIds.Count];
-
-        int i = 0;
-        foreach (string id in playerIds.Keys)
-        {
-            Player player = PlayerManager.GetPlayer(id);
-            msg.characters[i] = PlayerToCharInfo(player);
-            i++;
-        }
+        msg.characters[0] = PlayerToCharInfo(pe);
         Broadcast(msg);
 
         MsgEntityInit msgE = new MsgEntityInit();

@@ -3,8 +3,6 @@
 
 public partial class MsgHandler
 {
-
-
     //注册协议处理
     public static void MsgRegister(ClientState c, MsgBase msgBase)
     {
@@ -42,15 +40,19 @@ public partial class MsgHandler
             return;
         }
         //如果已经登陆，踢下线
-        if (PlayerManager.IsOnline(msg.id))
+        if (c.player != null)
         {
-            //发送踢下线协议
-            Player other = PlayerManager.GetPlayer(msg.id);
-            MsgKick msgKick = new MsgKick();
-            msgKick.reason = 0;
-            other.Send(msgKick);
-            //断开连接
-            NetManager.Close(other.state);
+            Room room = RoomManager.GetRoom(c.player.roomId);
+            if (room.playerManager.IsOnline(msg.id))
+            {
+                //发送踢下线协议
+                Player other = room.playerManager.GetPlayer(msg.id);
+                MsgKick msgKick = new MsgKick();
+                msgKick.reason = 0;
+                other.Send(msgKick);
+                //断开连接
+                NetManager.Close(other.state);
+            }
         }
         //获取玩家数据
         PlayerData playerData = DBManager.GetPlayerData(msg.id);
@@ -64,7 +66,6 @@ public partial class MsgHandler
         Player player = new Player(c);
         player.id = msg.id;
         player.data = playerData;
-        PlayerManager.AddPlayer(msg.id, player);
         c.player = player;
         //返回协议
         msg.result = 0;

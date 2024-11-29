@@ -1,21 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BattlePanel : BasePanel
 {
     public Button btnLeave;
-    public Slider slider;
-    private BaseSteve steve;
+    private CtrlSteve steve;
+    public Image[] hearts;
+    public int liveCount;
+    public Image[] meats;
+    public int meatCount;
 
     private void Start()
     {
         InitAim();
+        BattleManager.Panel = this;
     }
 
     public override void OnAwake()
     {
+        liveCount = hearts.Length;
+        meatCount = meats.Length;
         btnLeave.onClick.AddListener(OnClickLeave);
         EventHandler.OnHPChanged += RefreshHp;
         gameObject.SetActive(false);
@@ -28,10 +32,10 @@ public class BattlePanel : BasePanel
     //ÏÔÊ¾
     public override void OnShow()
     {
-        steve = BattleManager.GetCtrlSteve();
+        steve = (CtrlSteve)BattleManager.GetCtrlSteve();
         if (steve != null)
         {
-            RefreshHp(steve.hpRate);
+            RefreshHp(steve.hp);
         }
     }
 
@@ -42,9 +46,45 @@ public class BattlePanel : BasePanel
     }
 
     //¸üÐÂhp
-    private void RefreshHp(float value)
+    private void RefreshHp(int value)
     {
-        slider.value = value;
+        Debug.Log("RefreshHp " + value);
+        int delta = value - liveCount;
+        if(delta > 0)
+        {
+            for(int i = liveCount; i < value; i++)
+            {
+                hearts[i].enabled = true;
+            }
+        }
+        else if(delta < 0)
+        {
+            for(int i = liveCount-1; i >= value; i--)
+            {
+                hearts[i].enabled = false;
+            }
+        }
+        liveCount = value;
+    }
+
+    public void RefreshHunger(int delta)
+    {
+        Debug.Log("RefreshHunger: " + delta);
+        if(delta > 0)
+        {
+            for (int i = meatCount; i < meatCount+delta; i++)
+            {
+                meats[i].enabled = true;
+            }
+        }
+        else if(delta < 0)
+        {
+            for (int i = meatCount-1; i >= meatCount+delta; i--)
+            {
+                meats[i].enabled = false;
+            }
+        }
+        meatCount += delta;
     }
 
     public void InitAim()

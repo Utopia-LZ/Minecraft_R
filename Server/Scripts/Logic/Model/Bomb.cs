@@ -55,7 +55,7 @@
         msg.state = BombState.Exploded;
         room.Broadcast(msg);
 
-        PlayerManager.BombExplode(position, room);
+        room.playerManager.BombExplode(position, room);
         ChestManager.BombExplode(position, room);
         BombManager.BombExplode(position, room);
         ItemManager.DroppedExplode(position, room, playerId);

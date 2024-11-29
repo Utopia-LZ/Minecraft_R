@@ -7,6 +7,7 @@ public class BattleManager
 {
     //战场中的玩家
     public static Dictionary<string, BaseSteve> characters = new Dictionary<string, BaseSteve>();
+    public static BattlePanel Panel;
 
     //初始化
     public static void Init()
@@ -19,6 +20,7 @@ public class BattleManager
         NetManager.AddMsgListener("MsgLeaveRoom", OnMsgLeaveRoom);
         NetManager.AddMsgListener("MsgSyncSteve", OnMsgSyncSteve);
         NetManager.AddMsgListener("MsgHit", OnMsgHit);
+        NetManager.AddMsgListener("MsgHungry", OnMsgHungry);
 
         Config config = DataManager.Instance.Config;
         CtrlSteve.syncInterval = config.SyncInterval;
@@ -99,14 +101,14 @@ public class BattleManager
     }
 
     //产生角色
-    public static void GenerateSteve(CharacterInfo tankInfo)
+    public static void GenerateSteve(CharacterInfo Info)
     {
         //GameObject
         GameObject steveObj = ResManager.Instance.GetGameObject(ObjType.Steve);
-        steveObj.name = "Steve_" + tankInfo.id;
+        steveObj.name = "Steve_" + Info.id;
         //AddComponent
         BaseSteve steve = null;
-        if (tankInfo.id == GameMain.id)
+        if (Info.id == GameMain.id)
         {
             steve = steveObj.AddComponent<CtrlSteve>();
             steveObj.layer = LayerMask.NameToLayer("Own");
@@ -117,23 +119,24 @@ public class BattleManager
             steveObj.layer = LayerMask.NameToLayer("Steve");
         }
         //Camera
-        if (tankInfo.id == GameMain.id)
+        if (Info.id == GameMain.id)
         {
             CameraFollow cf = steveObj.AddComponent<CameraFollow>();
         }
         //属性
-        steve.Kind = tankInfo.Kind;
-        steve.id = tankInfo.id;
-        steve.hp = tankInfo.hp;
+        steve.Kind = Info.Kind;
+        steve.id = Info.id;
+        steve.hp = Info.hp;
+        Debug.Log("Generate Steve HP: " + steve.hp);
         //pos rotation
-        Vector3 pos = Vector3Int.V3IntToV3(tankInfo.pos);
-        Vector3 rot = Vector3Int.V3IntToV3(tankInfo.rot);
+        Vector3 pos = Vector3Int.V3IntToV3(Info.pos);
+        Vector3 rot = Vector3Int.V3IntToV3(Info.rot);
         steve.transform.position = pos;
         steve.transform.eulerAngles = rot;
         //init
         steve.Init();
         //列表
-        AddCharacter(tankInfo.id, steve);        
+        AddCharacter(Info.id, steve);        
     }
 
     //在地图加载前冻结玩家
@@ -147,10 +150,20 @@ public class BattleManager
         }
     }
 
+    public static void RefreshHunger(int delta)
+    {
+        if (Panel != null)
+        {
+            Panel.RefreshHunger(delta);
+        }
+        else Debug.Log("BattlePanel is NULL!");
+    }
+
     //收到进入房间协议
     public static void OnMsgEnterRoom(MsgBase msgBase)
     {
         MsgEnterRoom msg = (MsgEnterRoom)msgBase;
+        Debug.Log("OnMsgEnterRoom: " + msg.characters[0].id + " hp: " + msg.characters[0].hp);
         //成功进入房间
         if (msg.result == 0)
         {
@@ -228,5 +241,13 @@ public class BattleManager
         }
         //被击中
         steve.Attacked(msg.damage);
+    }
+
+    //收到则掉一格饱食度
+    public static void OnMsgHungry(MsgBase msgBase)
+    {
+        Debug.Log("OnMsgHungry");
+        MsgHungry msg = (MsgHungry)msgBase;
+        RefreshHunger(-1);
     }
 }

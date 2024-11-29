@@ -57,7 +57,7 @@ public class ZombieManager
     {
         Random rand = new Random();
         Vector3Int pos = new Vector3Int();
-        Vector3Int center = PlayerManager.GetCenterPosition(room.id);
+        Vector3Int center = room.playerManager.GetCenterPosition(room.id);
         center = Block.GetCornerPos(center);
         int count = 0;
         while (count < 200)

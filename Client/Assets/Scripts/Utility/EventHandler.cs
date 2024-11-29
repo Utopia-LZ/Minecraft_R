@@ -11,7 +11,7 @@ public static class EventHandler
     public delegate void ClosePanel(PanelType type);
     public static event ClosePanel OnClosePanel;
 
-    public delegate void HPChanged(float rate);
+    public delegate void HPChanged(int hp);
     public static event HPChanged OnHPChanged;
 
     public delegate void EnterRoom();
@@ -42,9 +42,9 @@ public static class EventHandler
     {
         OnClosePanel?.Invoke(type);
     }
-    public static void CallHPChanged(float rate)
+    public static void CallHPChanged(int hp)
     {       
-        OnHPChanged?.Invoke(rate);
+        OnHPChanged?.Invoke(hp);
     }
     public static void CallEnterRoom()
     {

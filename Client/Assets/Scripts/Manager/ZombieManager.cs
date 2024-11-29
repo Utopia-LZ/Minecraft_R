@@ -13,6 +13,9 @@ public class ZombieManager : Singleton<ZombieManager>
         NetManager.AddMsgListener("MsgZombieHit", OnMsgZombieHit);
         NetManager.AddMsgListener("MsgLoadZombie", OnMsgLoadZombie);
         Zombies = new();
+
+        Zombie.RecoverHunger = DataManager.Instance.Config.RecoverHunger;
+        Zombie.RecoverSaturation = DataManager.Instance.Config.RecoverSaturation;
     }
 
     public void Generate(CharacterInfo info)

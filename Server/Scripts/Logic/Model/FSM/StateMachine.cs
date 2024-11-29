@@ -16,10 +16,12 @@ public class StateMachine
     public State curStateType;
     public IState CurrentState;
     public Zombie Zombie;
+    public Room Room;
 
     public StateMachine(Zombie zombie)
     {
         this.Zombie = zombie;
+        Room = RoomManager.GetRoom(zombie.roomId);
         States[State.Chase] = new Chase(Zombie);
         States[State.Attack] = new Attack(Zombie);
         SwitchState(State.Chase);
@@ -30,7 +32,7 @@ public class StateMachine
         CurrentState.OnUpdate();
         int distance = 1000000;
         Player cplayer = null;
-        foreach (var player in PlayerManager.players.Values)
+        foreach (var player in Room.playerManager.players.Values)
         {
             if(player.roomId == -1) continue; //离线
             int curDis = (player.pos - Zombie.pos).Magnitude;

@@ -54,7 +54,7 @@ public partial class MsgHandler
         MsgEnterRoom msg = (MsgEnterRoom)msgBase;
         Player player = c.player;
         if (player == null) return;
-        
+        Console.WriteLine("MsgEnterRoom Plyaer HP: " + player.hp);
         //获取房间
         Room room = RoomManager.GetRoom(msg.id);
         if (room == null)
@@ -64,20 +64,12 @@ public partial class MsgHandler
             return;
         }
         //进入
-        if (!room.AddPlayer(player.id))
+        if (!room.AddPlayer(player))
         {
             msg.result = 1;
             player.Send(msg);
             return;
         }
-        //是房主
-        /*if (!room.IsOwner(player))
-        {
-            msg.result = 1;
-            player.Send(msg);
-            return;
-        }*/
-        
         //开战
         room.StartBattle(msg, player);
     }
@@ -102,6 +94,7 @@ public partial class MsgHandler
     //离开房间
     public static void MsgLeaveRoom(ClientState c, MsgBase msgBase)
     {
+        Console.WriteLine("MsgLeaveRoom");
         MsgLeaveRoom msg = (MsgLeaveRoom)msgBase;
         Player player = c.player;
         if (player == null) return;
@@ -112,7 +105,6 @@ public partial class MsgHandler
             player.Send(msg);
             return;
         }
-
         msg.id = player.id;
         //先广播，后移除
         room.Broadcast(msg);
