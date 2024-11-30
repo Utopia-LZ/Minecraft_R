@@ -3,6 +3,7 @@ using UnityEngine;
 public class BaseSteve : MonoBehaviour
 {
     public static int HP;
+    public static int Hunger;
     public static int Damage;
 
     public float walkSpeed;
@@ -34,6 +35,8 @@ public class BaseSteve : MonoBehaviour
 
     public void Attacked(int damage)
     {
+        Debug.Log("Attacked " + hp + " " + damage);
+        if (hp-damage >= CtrlSteve.HP || hp-damage < 0) return;
         hp -= damage;
         if(id == GameMain.id)
         {

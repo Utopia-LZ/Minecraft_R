@@ -18,6 +18,11 @@ class NetManager
     //Ping间隔
     public static long pingInterval = 30;
 
+    public static void InitConfig(Config config)
+    {
+        pingInterval = config.PingInterval;
+    }
+
     public static void StartLoop(int listenPort)
     {
         //Socket

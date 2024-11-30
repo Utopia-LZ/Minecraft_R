@@ -47,7 +47,7 @@ public class Excel2Json
     {
         return type.ToLower() switch
         {
-            "int" or "float" or "double" => value,
+            "int" or "float" or "double" or "long" => value,
             "bool" => value.ToLower(),
             "string" => $"\"{value}\"",
             _ => value,

@@ -92,7 +92,6 @@ public class DBManager
         }
         //序列化
         PlayerData playerData = new PlayerData();
-        //string data = Js.Serialize(playerData);
         string data = JsonConvert.SerializeObject(playerData);
         //写入数据库
         string sql = string.Format("insert into player set id ='{0}' ,data ='{1}';", id, data);
@@ -154,7 +153,6 @@ public class DBManager
             dataReader.Read();
             string data = dataReader.GetString("data");
             //反序列化
-            //PlayerData playerData = Js.Deserialize<PlayerData>(data);
             PlayerData playerData = JsonConvert.DeserializeObject<PlayerData>(data);
             dataReader.Close();
             return playerData;

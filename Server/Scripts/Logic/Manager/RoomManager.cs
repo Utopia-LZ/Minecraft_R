@@ -6,7 +6,7 @@ public class RoomManager
     //最大id
     private static int maxId = 0;
     //房间列表
-    public static Dictionary<int, Room> rooms = new Dictionary<int, Room>();
+    public static Dictionary<int, Room> Rooms = new Dictionary<int, Room>();
 
     //创建房间
     public static Room AddRoom()
@@ -14,36 +14,44 @@ public class RoomManager
         maxId++;
         Room room = new Room();
         room.id = maxId;
-        rooms.Add(room.id, room);
+        Rooms.Add(room.id, room);
         return room;
     }
 
     //删除房间
     public static bool RemoveRoom(int id)
     {
-        rooms.Remove(id);
+        Rooms.Remove(id);
         return true;
     }
 
     //获取房间
     public static Room GetRoom(int id)
     {
-        if (rooms.ContainsKey(id))
+        if (Rooms.ContainsKey(id))
         {
-            return rooms[id];
+            return Rooms[id];
         }
         return null;
+    }
+
+    //玩家掉线
+    public static void RemovePlayer(Player player)
+    {
+        if (player.roomId == -1) return;
+        Room room = Rooms[player.roomId];
+        room?.RemovePlayer(player.id);
     }
 
     //生成MsgGetRoomList协议
     public static MsgBase ToMsg()
     {
         MsgGetRoomList msg = new MsgGetRoomList();
-        int count = rooms.Count;
+        int count = Rooms.Count;
         msg.rooms = new RoomInfo[count];
-        //rooms
+        //Rooms
         int i = 0;
-        foreach (Room room in rooms.Values)
+        foreach (Room room in Rooms.Values)
         {
             RoomInfo roomInfo = new RoomInfo();
             //赋值

@@ -33,6 +33,7 @@ public partial class EventHandler
             {
                 Console.WriteLine("Ping Close " + s.socket.RemoteEndPoint.ToString());
                 NetManager.Close(s);
+                RoomManager.RemovePlayer(s.player);
                 return;
             }
         }

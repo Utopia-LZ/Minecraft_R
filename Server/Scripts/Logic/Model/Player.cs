@@ -5,6 +5,9 @@ public class Player
 {
     public static int HP;
     public static int Hunger;
+    public static int Full;
+    public static int CureCost;
+    public static int CureInterval;
     public static int Saturation;
     public static int HungerInterval;
     public static int StarveDamage;
@@ -15,6 +18,9 @@ public class Player
     {
         HP = config.PlayerHp;
         Hunger = config.Hunger;
+        Full = config.Full;
+        CureCost = config.CureCost;
+        CureInterval = config.CureInterval;
         Saturation = config.Saturation;
         HungerInterval = config.HungerInterval;
         StarveDamage = config.StarveDamage;
@@ -44,6 +50,7 @@ public class Player
     //玩家饥饿值
     public int hunger;
     public int saturation;
+    public int cureTimer = 0;
     //生物种类
     public Kind Kind = Kind.None;
 
@@ -52,7 +59,6 @@ public class Player
 
     public void Update()
     {
-        Console.WriteLine("Player Update " + saturation);
         if (saturation < 0)
         {
             saturation += HungerInterval;
@@ -62,6 +68,7 @@ public class Player
                 msg.id = id;
                 msg.damage = StarveDamage;
                 Send(msg);
+                TakeDamage(StarveDamage);
             }
             else
             {
@@ -74,6 +81,21 @@ public class Player
         else
         {
             saturation--;
+            Console.WriteLine("sat:" + saturation + " hunger:" + hunger + " hp:" + hp);
+            if(saturation > Full && hunger >= Hunger && hp < HP)
+            {
+                cureTimer++;
+                if(cureTimer > CureInterval)
+                {
+                    cureTimer = 0;
+                    saturation -= CureCost;
+                    MsgHit msg = new();
+                    msg.id = id;
+                    msg.damage = -1;
+                    Send(msg);
+                    TakeDamage(-1);
+                }
+            }
         }
     }
 

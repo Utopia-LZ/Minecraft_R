@@ -32,6 +32,7 @@ public class BattleManager
         CtrlSteve.RotateSpeed = config.RotateSpeed;
         BaseSteve.HP = config.PlayerHp;
         BaseSteve.Damage = config.PlayerDamage;
+        BaseSteve.Hunger = config.Hunger;
 }
 
     //Ìí¼ÓÍæ¼Ò

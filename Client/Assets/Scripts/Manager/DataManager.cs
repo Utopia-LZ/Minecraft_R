@@ -33,6 +33,9 @@ public class Config
     public int HungerInterval; //玩家饥饿间隔
     public int Hunger; //玩家饥饿值
     public int StarveDamage; //玩家空腹掉血值
+    public int Full; //玩家饱腹值(大于该值回血)
+    public int CureCost; //玩家回血消耗饱食度
+    public int CureInterval; //玩家回血间隔(tick)
     public float ThirdSpeed; //第三人称视角转动速度
     public float FollowSpeed; //相机跟随速度
     public float ZoomSpeed; //调整视野速度
@@ -53,6 +56,7 @@ public class Config
     public int BombFalloff; //TNT伤害衰减
     public string LocalSrcUrl; //本地资源地址
     public string ServerSrcUrl; //服务器资源地址
+    public long PingInterval; //Ping间隔
 }
 
 public class DataManager : Singleton<DataManager>

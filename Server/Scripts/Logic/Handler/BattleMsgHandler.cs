@@ -18,5 +18,7 @@
         if (player == null) return;
         player.hunger += msg.hunger;
         player.saturation += msg.saturation;
+        player.hunger = Math.Min(player.hunger,Player.Hunger);
+        player.saturation = Math.Min(player.saturation,Player.Saturation);
     }
 }

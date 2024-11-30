@@ -72,19 +72,22 @@ public class BattlePanel : BasePanel
         Debug.Log("RefreshHunger: " + delta);
         if(delta > 0)
         {
-            for (int i = meatCount; i < meatCount+delta; i++)
+            int maxMeat = Mathf.Min(meatCount+delta, CtrlSteve.Hunger);
+            for (int i = meatCount; i < maxMeat; i++)
             {
                 meats[i].enabled = true;
             }
+            meatCount = maxMeat;
         }
         else if(delta < 0)
         {
-            for (int i = meatCount-1; i >= meatCount+delta; i--)
+            int minMeat = Mathf.Max(meatCount+delta, 0);
+            for (int i = meatCount-1; i >= minMeat; i--)
             {
                 meats[i].enabled = false;
             }
+            meatCount = minMeat;
         }
-        meatCount += delta;
     }
 
     public void InitAim()
