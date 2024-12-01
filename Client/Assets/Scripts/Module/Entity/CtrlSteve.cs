@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CtrlSteve : BaseSteve
+public class CtrlSteve : BaseSteve, PoolObject
 {
-    public static float syncInterval = 0.1f; //0.05f; //同步帧率
-    public static float actInterval = 0.2f; //攻击间隔
-    public static float actDistance = 15f;
-    public static float jumpForce = 6f;
+    public static float syncInterval; //0.05f; //同步帧率
+    public static float actInterval; //攻击间隔
+    public static float actDistance;
+    public static float jumpForce;
+    public static float gravityForce;
     public static float WalkSpeed;
     public static float RunSpeed;
     public static float RotateSpeed;
@@ -80,7 +81,8 @@ public class CtrlSteve : BaseSteve
             BagManager.Instance.AddItem(item);
         }
 
-#endregion
+        #endregion
+        rb.AddForce(-transform.up * gravityForce, ForceMode.Force);
     }
 
     public override void Init()
@@ -104,9 +106,14 @@ public class CtrlSteve : BaseSteve
         //前进后退平移
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
-        Vector3 s = Time.deltaTime * walkSpeed * (y * transform.forward + x * transform.right);
+        float speed = walkSpeed;
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            speed = runSpeed;
+        }
+        Vector3 s = Time.deltaTime * speed * (y * transform.forward + x * transform.right);
         transform.position += s;
-        bool onGround = true;// (Physics.CheckBox(transform.position - Vector3.up, Vector3.one*0.1f, Quaternion.identity, groundLayer));        
+        bool onGround = (MapManager.GetType(transform.position-Vector3.up*1.5f) != BlockType.None);
         if (onGround && Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(transform.up*jumpForce,ForceMode.Impulse);
@@ -280,6 +287,12 @@ public class CtrlSteve : BaseSteve
         pos.x = Mathf.Floor(pos.x / (float)Chunk.width) * Chunk.width;
         pos.z = Mathf.Floor(pos.z / (float)Chunk.width) * Chunk.width;
         return new Vector3Int((int)pos.x, 0, (int)pos.z);
+    }
+
+    public void OnRecycle()
+    {
+        Destroy(GetComponent<CameraFollow>());
+        Destroy(this);
     }
 
     public void OnDrawGizmos()

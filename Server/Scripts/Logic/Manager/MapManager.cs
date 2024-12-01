@@ -1,8 +1,21 @@
-﻿public class MapManager
+﻿using Newtonsoft.Json;
+using System.Text;
+
+public class MapManager
 {
     public Dictionary<Vector3Int, Chunk> chunks = new();
     public Dictionary<Vector3Int, Block> blocks = new();
     public int chunkIndex = 0;
+
+    public MapManager() { }
+    public MapManager(List<string> data)
+    {
+        Deserialize(data);
+        foreach (Chunk chunk in chunks.Values)
+        {
+            InitBlock(chunk);
+        }
+    }
 
     public void AddChunk(Chunk chunk)
     {
@@ -51,7 +64,7 @@
                     if (block.type != BlockType.None)
                         suc = updateBlocks.Add(block.position);
                 }
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             Chunk nbChunk = GetChunk(chunk.position + Block.edgeOffset[i] * Chunk.width);
             if (nbChunk == null) continue;
@@ -170,5 +183,26 @@
         if(center == null) return position;
         Vector3Int res = center.RandormGetEdge();
         return res == Vector3Int.Zero ? position : res;
+    }
+
+    public List<ChunkInfo> Serialize()
+    {
+        List<ChunkInfo> data = new();
+        foreach (Chunk chunk in chunks.Values)
+        {
+            data.Add(chunk.GetInfo());
+        }
+        return data;
+    }
+
+    public void Deserialize(List<string> data)
+    {
+        if (data.Count == 0) return;
+        for(int i = 0; i < data.Count; i++)
+        {
+            Chunk chunk = new Chunk(JsonConvert.DeserializeObject<ChunkInfo>(data[i]));
+            chunks[chunk.position] = chunk;
+            Console.WriteLine("LoadFromSql CHunkPos: " +  chunk.position.ToString());
+        }
     }
 }

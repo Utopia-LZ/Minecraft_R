@@ -9,6 +9,7 @@ class MainClass
         {
             return;
         }
+        RoomManager.Init();
         NetManager.StartLoop(8888);
     }
 }

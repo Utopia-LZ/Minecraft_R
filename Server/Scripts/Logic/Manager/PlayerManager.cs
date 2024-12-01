@@ -1,7 +1,17 @@
-﻿public class PlayerManager
+﻿using Newtonsoft.Json;
+using System.Text;
+
+public class PlayerManager
 {
     //玩家列表
     public Dictionary<string, Player> players = new Dictionary<string, Player>();
+    public int onlineCount = 0;
+
+    public PlayerManager() { }
+    public PlayerManager(string data)
+    {
+        Deserialize(data);
+    }
 
     public void Update(int roomId)
     {
@@ -15,7 +25,7 @@
     //玩家是否在线
     public bool IsOnline(string id)
     {
-        return players.ContainsKey(id);
+        return players.ContainsKey(id) && players[id].roomId != -1;
     }
     //获取玩家
     public Player GetPlayer(string id)
@@ -27,12 +37,27 @@
     //添加玩家
     public void AddPlayer(Player player)
     {
+        if (players.ContainsKey(player.id))
+        {
+            player.pos = players[player.id].pos;
+            player.rot = players[player.id].rot;
+            player.hp = players[player.id].hp;
+            player.hunger = players[player.id].hunger;
+            player.saturation = players[player.id].saturation;
+            Console.WriteLine("LoadSql player pos: " +  player.pos.ToString());
+        }
         players[player.id] = player;
+        onlineCount++;
     }
     //删除玩家
-    public void RemovePlayer(string id)
+    public void RemovePlayer(Player player)
     {
-        players.Remove(id);
+        if (players.ContainsKey(player.id))
+        {
+            players[player.id].roomId = -1;
+            onlineCount--;
+        }
+        player.roomId = -1;
     }
 
     public Vector3Int GetCenterPosition(int roomId)
@@ -63,6 +88,30 @@
             msg.id = player.id;
             msg.damage = Bomb.damage;
             room.Broadcast(msg);
+        }
+    }
+
+    public string Serialize()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach(Player player in players.Values)
+        {
+            PlayerInfo info = player.GetInfo();
+            info.roomId = -1; //默认玩家均离线
+            sb.Append(JsonConvert.SerializeObject(info) + "|");
+        }
+        if(sb.Length > 0) sb.Remove(sb.Length - 1, 1);
+        return sb.ToString();
+    }
+
+    public void Deserialize(string data)
+    {
+        if (data == null || data == "") return;
+        string[] parts = data.Split('|');
+        for(int i = 0; i < parts.Length; i++)
+        {
+            Player player = new Player(JsonConvert.DeserializeObject<PlayerInfo>(parts[i]));
+            players[player.id] = player;
         }
     }
 }

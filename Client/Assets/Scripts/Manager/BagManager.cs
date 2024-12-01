@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
@@ -16,10 +18,14 @@ public class BagManager:Singleton<BagManager>
     public BagPanel BagPanel;
     public int SelectSlotIndex;
 
+    private SynchronizationContext mainThreadContext;
+
     public Item SelectSlot { get { return BagPanel.Items[SelectSlotIndex]; } }
 
     public void Init()
     {
+        mainThreadContext = SynchronizationContext.Current;
+
         NetManager.AddMsgListener("MsgAddItem",OnMsgAddItem);
         NetManager.AddMsgListener("MsgRemoveItem",OnMsgRemoveItem);
         NetManager.AddMsgListener("MsgLoadBag", OnMsgLoadBag);
@@ -105,8 +111,26 @@ public class BagManager:Singleton<BagManager>
     {
         Debug.Log("OnMsgLoadBag");
         MsgLoadBag msg = (MsgLoadBag)msgBase;
-        Slot[] slots = msg.slots;
-        for(int i = 0; i < slots.Length; i++)
+        Thread thread = new(new ParameterizedThreadStart(WaitingLoad));
+        thread.Start(msg.slots);
+    }
+
+    public void WaitingLoad(object obj)
+    {
+        while (BagPanel == null)
+        {
+            Thread.Sleep(100);
+        }
+        mainThreadContext.Post(_ =>
+        {
+            DelayLoadBag(obj);
+        }, null);
+    }
+
+    public void DelayLoadBag(object obj)
+    {
+        Slot[] slots = (Slot[])obj;
+        for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].item.type != BlockType.None)
             {

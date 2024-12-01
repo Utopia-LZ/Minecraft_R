@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+public class Item : MonoBehaviour, PoolObject
 {
     public TMP_Text Count;
     public Image Icon;
@@ -69,5 +69,10 @@ public class Item : MonoBehaviour
             type = type,
             id = id,
         };
+    }
+
+    public void OnRecycle()
+    {
+        count = 0;
     }
 }

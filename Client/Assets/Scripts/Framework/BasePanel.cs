@@ -9,6 +9,7 @@ public enum PanelType
     Room,
     Battle,
     Chat,
+    Wait,
 }
 
 public class BasePanel : MonoBehaviour

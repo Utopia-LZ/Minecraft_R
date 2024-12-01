@@ -37,10 +37,11 @@ public partial class MsgHandler
         {
             msg.result = 1;
             NetManager.Send(c, msg);
+            Console.WriteLine("Have already login");
             return;
         }
         //如果已经登陆，踢下线
-        if (c.player != null)
+        /*if (c.player != null)
         {
             Room room = RoomManager.GetRoom(c.player.roomId);
             if (room.playerManager.IsOnline(msg.id))
@@ -53,17 +54,18 @@ public partial class MsgHandler
                 //断开连接
                 NetManager.Close(other.state);
             }
-        }
+        }*/
         //获取玩家数据
         PlayerData playerData = DBManager.GetPlayerData(msg.id);
+        //构建Player
+        Player player = new Player(c);
         if (playerData == null)
         {
             msg.result = 1;
+            player.data = new PlayerData();
             NetManager.Send(c, msg);
             return;
         }
-        //构建Player
-        Player player = new Player(c);
         player.id = msg.id;
         player.data = playerData;
         c.player = player;

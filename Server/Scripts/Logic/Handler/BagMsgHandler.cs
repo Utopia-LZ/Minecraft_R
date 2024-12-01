@@ -49,10 +49,12 @@ public partial class MsgHandler
                 addedItem.count -= delta;
                 msg.slot.item.count = delta;
                 msg.slot.idx = (ushort)j;
+                slots[j].idx = (ushort)j;
                 slots[j].item.type = addedItem.type;
                 slots[j].item.count = delta;
                 if (msg.panelType == ItemPanelType.Inventory)
                 {
+                    Console.WriteLine("MsgAddItem: " + msg.slot);
                     player.Send(msg);
                 }
                 else if (msg.panelType == ItemPanelType.Chest)

@@ -1,4 +1,12 @@
-﻿public class Zombie
+﻿[System.Serializable]
+public struct ZombieInfo
+{
+    public string id;
+    public Vector3Int pos;
+    public int roomId;
+}
+
+public class Zombie
 {
     public StateMachine sm;
     public Player ChasedPlayer;
@@ -32,6 +40,13 @@
     {
         this.pos = pos;
         this.roomId = roomId;
+        sm = new(this);
+    }
+    public Zombie(ZombieInfo info)
+    {
+        id = info.id;
+        pos = info.pos;
+        roomId = info.roomId;
         sm = new(this);
     }
 
@@ -88,5 +103,15 @@
         droppedItem.id = msgD.id;
         ItemManager.AddItem(droppedItem);
         room.zombieManager.Remove(id);
+    }
+
+    public ZombieInfo GetInfo()
+    {
+        return new ZombieInfo
+        {
+            id = id,
+            pos = pos,
+            roomId = roomId,
+        };
     }
 }

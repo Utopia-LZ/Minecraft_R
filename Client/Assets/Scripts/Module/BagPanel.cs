@@ -51,6 +51,7 @@ public class BagPanel : ItemBasePanel
             if (Items[i] == null) continue;
             //Destroy(Items[i].gameObject);
             ResManager.Instance.RecycleObj(Items[i].gameObject, ObjType.Item);
+            Items[i].OnRecycle();
             Items[i] = null;
         }
     }

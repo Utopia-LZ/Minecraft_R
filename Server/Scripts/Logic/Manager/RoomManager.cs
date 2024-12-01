@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-public class RoomManager
+﻿public class RoomManager
 {
     //最大id
     private static int maxId = 0;
     //房间列表
-    public static Dictionary<int, Room> Rooms = new Dictionary<int, Room>();
+    public static Dictionary<int, Room> Rooms = new();
+
+    public static void Init()
+    {
+        Rooms = DBManager.GetAllRoomData();
+    }
 
     //创建房间
     public static Room AddRoom()
@@ -15,6 +17,7 @@ public class RoomManager
         Room room = new Room();
         room.id = maxId;
         Rooms.Add(room.id, room);
+        room.AddRoomData();
         return room;
     }
 
@@ -22,6 +25,7 @@ public class RoomManager
     public static bool RemoveRoom(int id)
     {
         Rooms.Remove(id);
+        DBManager.RemoveRoomData(id);
         return true;
     }
 
@@ -56,7 +60,7 @@ public class RoomManager
             RoomInfo roomInfo = new RoomInfo();
             //赋值
             roomInfo.id = room.id;
-            roomInfo.count = room.playerIds.Count;
+            roomInfo.count = room.playerManager.players.Count;
 
             msg.rooms[i] = roomInfo;
             i++;

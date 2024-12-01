@@ -31,16 +31,15 @@ public partial class MsgHandler
         Player player = c.player;
         if (player == null) return;
         //已经在房间里
-        if (player.roomId >= 0)
+        if (player.roomId != -1)
         {
             msg.result = 1;
             player.Send(msg);
-            Console.WriteLine("CreateRoom Fail");
+            Console.WriteLine("CreateRoom Fail, roomId != -1");
             return;
         }
         //创建
         Room room = RoomManager.AddRoom();
-        //*room.AddPlayer(player.id);
 
         msg.result = 0;
         msg.id = room.id;
@@ -51,6 +50,7 @@ public partial class MsgHandler
     //进入房间 直接开始战斗
     public static void MsgEnterRoom(ClientState c, MsgBase msgBase)
     {
+        Console.WriteLine("OnEnterRoom");
         MsgEnterRoom msg = (MsgEnterRoom)msgBase;
         Player player = c.player;
         if (player == null) return;
@@ -61,16 +61,19 @@ public partial class MsgHandler
         {
             msg.result = 1;
             player.Send(msg);
+            Console.WriteLine("Room is null");
             return;
         }
         //进入
         if (!room.AddPlayer(player))
         {
+            Console.WriteLine("AddPlayer Failed");
             msg.result = 1;
             player.Send(msg);
             return;
         }
-        //开战
+        Console.WriteLine("MsgEnterRoom PlayerRoomID: " + c.player.roomId);
+        //进入房间
         room.StartBattle(msg, player);
     }
 
@@ -102,6 +105,7 @@ public partial class MsgHandler
         Room room = RoomManager.GetRoom(player.roomId);
         if (room == null)
         {
+            Console.WriteLine("Room is null with id: " + c.player.roomId);
             player.Send(msg);
             return;
         }

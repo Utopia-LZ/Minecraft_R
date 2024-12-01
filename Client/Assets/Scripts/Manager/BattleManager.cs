@@ -27,6 +27,7 @@ public class BattleManager
         CtrlSteve.actInterval = config.ActInterval;
         CtrlSteve.actDistance = config.ActDistance;
         CtrlSteve.jumpForce = config.JumpForce;
+        CtrlSteve.gravityForce = config.GravityForce;
         CtrlSteve.WalkSpeed = config.WalkSpeed;
         CtrlSteve.RunSpeed = config.RunSpeed;
         CtrlSteve.RotateSpeed = config.RotateSpeed;
@@ -149,6 +150,7 @@ public class BattleManager
             Debug.Log("Freeze Id: " +  player.id);
             player.rb.isKinematic = value;
         }
+        if(!value) PanelManager.Instance.Close(PanelType.Wait);
     }
 
     public static void RefreshHunger(int delta)
@@ -163,8 +165,8 @@ public class BattleManager
     //收到进入房间协议
     public static void OnMsgEnterRoom(MsgBase msgBase)
     {
+        Debug.Log("OnMsgEnterRoom");
         MsgEnterRoom msg = (MsgEnterRoom)msgBase;
-        Debug.Log("OnMsgEnterRoom: " + msg.characters[0].id + " hp: " + msg.characters[0].hp);
         //成功进入房间
         if (msg.result == 0)
         {

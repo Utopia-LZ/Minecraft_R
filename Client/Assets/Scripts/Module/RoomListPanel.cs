@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RoomListPanel : BasePanel
 {
     
-    public Text idText;//账号文本
-    public Text scoreText;//战绩文本    
+    public TMP_Text idText;//账号文本  
     public Button createButton;//创建房间按钮
     public Button reflashButton;//刷新列表按钮
     public Transform content;//列表容器
@@ -59,12 +59,12 @@ public class RoomListPanel : BasePanel
     public void OnMsgGetAchieve(MsgBase msgBase)
     {
         MsgGetAchieve msg = (MsgGetAchieve)msgBase;
-        scoreText.text = msg.win + "胜 " + msg.lost + "负";
     }
 
     //收到房间列表协议
     public void OnMsgGetRoomList(MsgBase msgBase)
     {
+        Debug.Log("OnMsgGetRoomList");
         MsgGetRoomList msg = (MsgGetRoomList)msgBase;
         //清除房间列表
         for (int i = content.childCount - 1; i >= 0; i--)
@@ -93,21 +93,12 @@ public class RoomListPanel : BasePanel
         o.transform.localScale = Vector3.one;
         //获取组件
         Transform trans = o.transform;
-        Text idText = trans.Find("IdText").GetComponent<Text>();
-        Text countText = trans.Find("CountText").GetComponent<Text>();
-        Text statusText = trans.Find("StatusText").GetComponent<Text>();
+        TMP_Text idText = trans.Find("IdText").GetComponent<TMP_Text>();
+        TMP_Text countText = trans.Find("CountText").GetComponent<TMP_Text>();
         Button btn = trans.Find("JoinButton").GetComponent<Button>();
         //填充信息
         idText.text = roomInfo.id.ToString();
         countText.text = roomInfo.count.ToString();
-        if (roomInfo.status == 0)
-        {
-            statusText.text = "准备中";
-        }
-        else
-        {
-            statusText.text = "战斗中";
-        }
         //按钮事件
         btn.name = idText.text;
         btn.onClick.AddListener(delegate () {
@@ -128,6 +119,7 @@ public class RoomListPanel : BasePanel
         MsgEnterRoom msg = new MsgEnterRoom();
         msg.id = int.Parse(idString);
         NetManager.Send(msg);
+        PanelManager.Instance.Open(PanelType.Wait);
     }
 
     //点击新建房间按钮
@@ -135,6 +127,7 @@ public class RoomListPanel : BasePanel
     {
         MsgCreateRoom msg = new MsgCreateRoom();
         NetManager.Send(msg);
+        PanelManager.Instance.Open(PanelType.Wait);
     }
 
     //收到新建房间协议

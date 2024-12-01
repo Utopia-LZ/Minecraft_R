@@ -5,22 +5,22 @@ public class Room
     public static int TICK;
     public static int CYCLE;
     public static int DAY_TIME;
+    public static int SAVE_INTERVAL;
 
     //id
     public int id = 0;
     //最大玩家数
     public int maxPlayer = 6;
-    //玩家列表
-    public Dictionary<string, bool> playerIds = new();
     //房主id
     public string ownerId = "";
     //暂停
-    public bool paused = false;
+    public bool paused = true;
 
     public System.Timers.Timer timer;
     private Random rand;
     private int counter = 0;
     public int Time;
+    private int saveCounter = 0;
 
     public ChatManager chatManager;
     public MapManager mapManager;
@@ -41,17 +41,35 @@ public class Room
         timer.Enabled = true;
         timer.Start();
     }
+    
+    public Room(int id, string cdata, List<string> mdata, string zdata, string pdata)
+    {
+        this.id = id;
+        chatManager = new ChatManager(cdata);
+        mapManager = new MapManager(mdata);
+        zombieManager = new ZombieManager(this,zdata);
+        playerManager = new PlayerManager(pdata);
+        Time = 0;
+        rand = new Random();
+        timer = new System.Timers.Timer(TICK);
+        timer.Elapsed += Update;
+        timer.AutoReset = true;
+        timer.Enabled = true;
+        timer.Start();
+    }
 
     public static void InitConfig(Config config)
     {
         TICK = config.TickTime;
         CYCLE = config.CycleTime;
         DAY_TIME = CYCLE / 2;
+        SAVE_INTERVAL = config.SaveInterval;
     }
 
     private void Update(object? sender, ElapsedEventArgs e)
     {
-        if (paused) return;
+        if (paused || playerManager.onlineCount==0) return;
+
         if(Time % DAY_TIME == 0) //昼夜交替同步一次
         {
             MsgTime msg = new MsgTime();
@@ -60,47 +78,63 @@ public class Room
         }
         Time++;
         if (Time >= CYCLE) Time = 0;
-
+//Console.WriteLine("E");
         zombieManager.Update();
+    //Console.WriteLine("F");
         playerManager.Update(id);
+        saveCounter++;
+        if(saveCounter > SAVE_INTERVAL)
+        {
+            saveCounter = 0;
+            //Console.WriteLine("G");
+            string cData = chatManager.Serialize();
+            //Console.WriteLine("K");
+            List<ChunkInfo> mData = mapManager.Serialize();
+            //Console.WriteLine("L");
+            string zData = zombieManager.Serialize();
+            //Console.WriteLine("M");
+            string pData = playerManager.Serialize();
+            //Console.WriteLine("N");
+            DBManager.SaveRoomData(id, cData, mData, zData, pData);
+            Console.WriteLine("Room Auto Save " + id);
+        }
+    }
+
+    public void AddRoomData()
+    {
+        string cData = chatManager.Serialize();
+        List<ChunkInfo> mData = mapManager.Serialize();
+        string zData = zombieManager.Serialize();
+        string pData = playerManager.Serialize();
+        DBManager.AddRoomData(id, cData, mData, zData, pData);
     }
 
     //添加玩家
     public bool AddPlayer(Player player)
     {
         //房间人数
-        if (playerIds.Count >= maxPlayer)
+        if (playerManager.onlineCount >= maxPlayer)
         {
             Console.WriteLine("room.AddPlayer fail, reach maxPlayer");
             return false;
         }
-        if(playerIds.Count == 0)
+        if(playerManager.onlineCount == 0)
         {
             paused = false;
         }
-        else if (playerIds.ContainsKey(player.id)) //已经在房间里
+        else if (playerManager.players.ContainsKey(player.id) && playerManager.players[player.id].roomId!=-1) //已经在房间里
         {
             Console.WriteLine("room.AddPlayer fail, already in this room");
             return false;
         }
         //加入列表
-        playerIds[player.id] = true;
         playerManager.AddPlayer(player);
-        player.roomId = this.id;
-        //设置房主
-        if (ownerId == "")
-        {
-            ownerId = player.id;
-        }
+        //Console.WriteLine("Room.AddPlayer pos: " + player.pos.ToString());
+        player.roomId = id;
+        //Console.WriteLine("PlayerRoomId: " + player.roomId + " ListPRoomId: " + playerManager.players[player.id].roomId);
         //广播
         Broadcast(ToMsg());
         return true;
-    }
-
-    //是不是房主
-    public bool IsOwner(Player player)
-    {
-        return player.id == ownerId;
     }
 
     //删除玩家
@@ -114,19 +148,16 @@ public class Room
             return false;
         }
         //没有在房间里
-        if (!playerIds.ContainsKey(id))
+        if (!playerManager.players.ContainsKey(id) || playerManager.players[id].roomId==-1)
         {
             Console.WriteLine("room.RemovePlayer fail, not in this room");
             return false;
         }
         //删除列表
-        playerIds.Remove(id);
-        playerManager.RemovePlayer(id);
+        playerManager.RemovePlayer(player);
         Console.WriteLine("RemovePlayer: " + id);
-        //设置玩家数据
-        player.roomId = -1; //:暂时表示在线状态 -1为离线
         //房间为空
-        if (playerIds.Count == 0)
+        if (playerManager.onlineCount == 0)
         {
             paused = true;
         }
@@ -137,7 +168,7 @@ public class Room
     public string SwitchOwner()
     {
         //选择第一个玩家
-        foreach (string id in playerIds.Keys)
+        foreach (string id in playerManager.players.Keys)
         {
             return id;
         }
@@ -149,10 +180,9 @@ public class Room
     //广播消息
     public void Broadcast(MsgBase msg)
     {
-        foreach (string id in playerIds.Keys)
+        foreach (Player player in playerManager.players.Values)
         {
-            Player player = playerManager.GetPlayer(id);
-            player?.Send(msg);
+            player.Send(msg);
         }
     }
 
@@ -160,22 +190,18 @@ public class Room
     public MsgBase ToMsg()
     {
         MsgGetRoomInfo msg = new MsgGetRoomInfo();
-        int count = playerIds.Count;
+        int count = playerManager.players.Count;
         msg.players = new PlayerInfo[count];
         //players
         int i = 0;
-        foreach (string id in playerIds.Keys)
+        Console.WriteLine("PlayerCount: " + count);
+        foreach (Player player in playerManager.players.Values)
         {
-            Player player = playerManager.GetPlayer(id);
+            if (player.roomId == -1) continue;
+            Console.WriteLine("AddPlayerToMsg");
             PlayerInfo playerInfo = new PlayerInfo();
             //赋值
-            playerInfo.id = player.id;
-            playerInfo.isOwner = 0;
-            if (IsOwner(player))
-            {
-                playerInfo.isOwner = 1;
-            }
-
+            playerInfo = player.GetInfo();
             msg.players[i] = playerInfo;
             i++;
         }
@@ -213,32 +239,23 @@ public class Room
     private void ResetPlayers()
     {
         //位置和旋转
-        foreach (string id in playerIds.Keys)
+        foreach (Player player in playerManager.players.Values)
         {
-            Player player = playerManager.GetPlayer(id);
-            SetBirthPos(player);
-        }
-        //生命值
-        foreach (string id in playerIds.Keys)
-        {
-            Player player = playerManager.GetPlayer(id);
             player.hp = Player.HP;
+            SetBirthPos(player);
         }
     }
 
     //进入房间
     public bool StartBattle(MsgEnterRoom msg, Player pe)
     {
-        if (!CanStartBattle())
-        {
-            return false;
-        }
         //玩家战斗属性
-        ResetPlayers();
+        //ResetPlayers();
         //返回数据
         msg.mapId = 1;
-        msg.characters = new CharacterInfo[playerIds.Count];
+        msg.characters = new CharacterInfo[1];
         msg.characters[0] = PlayerToCharInfo(pe);
+        pe.roomId = msg.id;
         Broadcast(msg);
 
         MsgEntityInit msgE = new MsgEntityInit();
@@ -273,13 +290,8 @@ public class Room
         pe.Send(msgT);
 
         ChestManager.LoadChestContent(pe);
+        Console.WriteLine("Finish StartBattle");
         return true;
     }
-
-    //是否死亡
-    /*public bool IsDie(Player player)
-    {
-        return player.hp <= 0;
-    }*/
 }
 

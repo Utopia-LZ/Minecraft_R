@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class MapManager
 {
@@ -35,6 +36,15 @@ public class MapManager
             msg.chunkPos = opos;
             NetManager.Send(msg);
         }
+    }
+
+    public static BlockType GetType(Vector3 pos)
+    {
+        Vector3Int corner = Vector3Int.ToVector3Int(pos);
+        Vector3Int blockPos = (corner % Chunk.width + Chunk.width) % Chunk.width;
+        Vector3Int chunkPos = corner - blockPos;
+        if (!chunks.ContainsKey(chunkPos)) return BlockType.None;
+        return chunks[chunkPos].Type(blockPos);
     }
 
     public static void ClearMap()

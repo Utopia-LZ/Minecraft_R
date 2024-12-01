@@ -1,5 +1,4 @@
 using UnityEngine;
-using Pair = System.Collections.Generic.KeyValuePair<UnityEngine.Transform, Item>;
 
 public class ItemBasePanel : BasePanel
 {

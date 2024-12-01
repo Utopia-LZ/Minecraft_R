@@ -1,5 +1,16 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+
+[System.Serializable]
+public class PlayerInfo
+{
+    public string id = "";
+    public int hp;
+    public int hunger;
+    public int saturation;
+    public Vector3Int pos;
+    public Vector3Int rot;
+    public int roomId;
+}
 
 public class Player
 {
@@ -39,7 +50,20 @@ public class Player
         hp = HP;
         hunger = Hunger;
         saturation = Saturation;
+        pos = Vector3Int.Float2Vector(5, 13, 5);
+        rot = Vector3Int.Zero;
     }
+    public Player(PlayerInfo info)
+    {
+        id = info.id;
+        hp = info.hp;
+        hunger = info.hunger;
+        saturation = info.saturation;
+        pos = info.pos;
+        rot = info.rot;
+        roomId = info.roomId;
+    }
+
     //坐标和旋转
     public Vector3Int pos;
     public Vector3Int rot;
@@ -81,7 +105,7 @@ public class Player
         else
         {
             saturation--;
-            Console.WriteLine("sat:" + saturation + " hunger:" + hunger + " hp:" + hp);
+            //Console.WriteLine("sat:" + saturation + " hunger:" + hunger + " hp:" + hp);
             if(saturation > Full && hunger >= Hunger && hp < HP)
             {
                 cureTimer++;
@@ -139,5 +163,19 @@ public class Player
     public void Send(MsgBase msgBase)
     {
         NetManager.Send(state, msgBase);
+    }
+
+    public PlayerInfo GetInfo()
+    {
+        return new PlayerInfo
+        {
+            id = id,
+            hp = hp,
+            hunger = hunger,
+            saturation = saturation,
+            pos = pos,
+            rot = rot,
+            roomId = roomId,
+        };
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
@@ -154,6 +157,7 @@ public class DBManager
             string data = dataReader.GetString("data");
             //反序列化
             PlayerData playerData = JsonConvert.DeserializeObject<PlayerData>(data);
+                                  //DecodePlayerData(data);
             dataReader.Close();
             return playerData;
         }
@@ -168,6 +172,7 @@ public class DBManager
         if (playerData == null) return false;
         //序列化
         string data = JsonConvert.SerializeObject(playerData);
+                    //EncodePlayerData(playerData);
         //sql
         string sql = string.Format("update player set data='{0}' where id ='{1}';", data, id);
         //更新
@@ -182,6 +187,137 @@ public class DBManager
             Console.WriteLine(data);
             Console.WriteLine("[数据库] UpdatePlayerData err, " + e.Message);
             return false;
+        }
+    }
+
+    public static void AddRoomData(int roomId, string chatInfo, List<ChunkInfo> mapInfo, string zombieInfo, string playerInfo)
+    {
+        string sql = $"insert into room set roomId={roomId},chatInfo='{chatInfo}'," +
+            $"zombieInfo='{zombieInfo}',playerInfo='{playerInfo}'";
+        //更新
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(sql, mysql);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[数据库] AddRoomData err, " + e.Message);
+        }
+
+        //地图信息单独存表
+        if (mapInfo.Count == 0) return;
+        StringBuilder sb = new StringBuilder();
+        sb.Append("insert into map(roomId,chunkId,chunkInfo) values ");
+        foreach(ChunkInfo chunk in mapInfo)
+        {
+            string data = JsonConvert.SerializeObject(chunk);
+            sb.Append($"({roomId},'{chunk.pos.ToString()}','{data}'),");
+        }
+        sb.Remove(sb.Length - 1, 1);
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(sb.ToString(), mysql);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[数据库] AddChunkData err, " + e.Message);
+        }
+    }
+    public static Dictionary<int,Room> GetAllRoomData()
+    {
+        Dictionary<int, Room> rooms = new();
+        try
+        {
+            Dictionary<int, List<string>> maps = new();
+            using (MySqlCommand cmdC = new MySqlCommand("select * from map", mysql))
+            {
+                MySqlDataReader reader = cmdC.ExecuteReader();
+                while (reader.Read())
+                {
+                    int roomId = reader.GetInt32("roomId");
+                    if (!maps.ContainsKey(roomId)) maps[roomId] = new List<string>();
+                    maps[roomId].Add(reader.GetString("chunkInfo"));
+                }
+                reader.Close();
+            }
+
+            //查询
+            string sql = "select * from room";
+            MySqlCommand cmd = new MySqlCommand(sql, mysql);
+            MySqlDataReader dataReader = cmd.ExecuteReader();
+            if (!dataReader.HasRows)
+            {
+                dataReader.Close();
+                return rooms;
+            }
+
+            //读取
+            while (dataReader.Read())
+            {
+                int id = dataReader.GetInt32(1);
+                string cdata = dataReader.GetString(2);
+                string zdata = dataReader.GetString(3);
+                string pdata = dataReader.GetString(4);
+                Room room = new Room(id, cdata, maps[id], zdata, pdata);
+                rooms[id] = room;
+            }
+            dataReader.Close();
+            return rooms;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[数据库] GetRoomData fail, " + e.Message);
+            return rooms;
+        }
+    }
+    public static void SaveRoomData(int roomId, string chatInfo, List<ChunkInfo> mapInfo, string zombieInfo, string playerInfo)
+    {
+        string sql = $"update room set chatInfo='{chatInfo}'," +
+            $"zombieInfo='{zombieInfo}',playerInfo='{playerInfo}' where roomId={roomId}";
+        //更新
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(sql, mysql);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[数据库] SaveRoomData err, " + e.Message);
+        }
+
+        //地图信息单独存表
+        StringBuilder sb = new StringBuilder();
+        sb.Append("INSERT INTO map (roomId, chunkId, chunkInfo) values ");
+        foreach (ChunkInfo chunk in mapInfo)
+        {
+            string data = JsonConvert.SerializeObject(chunk);
+            sb.Append($"({roomId},'{chunk.pos.ToString()}','{data}'),");
+        }
+        sb.Remove(sb.Length - 1, 1);
+        sb.Append("ON DUPLICATE KEY UPDATE chunkInfo = VALUES(chunkInfo);");
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(sb.ToString(), mysql);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[数据库] SaveChunkData err, " + e.Message);
+        }
+    }
+    public static void RemoveRoomData(int roomId)
+    {
+        string sql = $"delete from room where roomId={roomId}";
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(sql, mysql);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[数据库] DeleteRoomData err, " + e.Message);
         }
     }
 }

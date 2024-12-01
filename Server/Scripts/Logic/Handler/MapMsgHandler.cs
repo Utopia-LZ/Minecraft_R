@@ -1,23 +1,24 @@
-﻿using System.Diagnostics;
-
-public partial class MsgHandler
+﻿public partial class MsgHandler
 {
     public static void MsgMapInit(ClientState c, MsgBase msgBase)
     {
         Room room = RoomManager.GetRoom(c.player.roomId);
+        if(room == null)
+        {
+            Console.WriteLine("Room is null!");
+            return;
+        }
         MsgMapInit msg = (MsgMapInit)msgBase;
         Chunk chunk = room.mapManager.GetChunk(msg.chunkPos);
         if(chunk == null)
         {
+            Console.WriteLine("Chunk is null with pos: " + msg.chunkPos.ToString());
             chunk = new Chunk(room.mapManager.chunkIndex++, msg.chunkPos);
             room.mapManager.InitBlock(chunk);
             room.mapManager.AddChunk(chunk);
         }
-        if (room != null)
-        {
-            msg.map = MapManager.To1(chunk.map);
-            room.Broadcast(msg);
-        }
+        msg.map = MapManager.To1(chunk.map);
+        room.Broadcast(msg);
     }
 
     public static void MsgMapChange(ClientState c, MsgBase msgBase)

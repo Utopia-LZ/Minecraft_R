@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using SimplexNoise;
+﻿using SimplexNoise;
 using System.Numerics;
-using System;
 
+[System.Serializable]
 public enum BlockType : byte
 {
     None = 0,
@@ -14,6 +13,14 @@ public enum BlockType : byte
     Light,
     Carrion,
     Dropped,
+}
+
+[System.Serializable]
+public struct ChunkInfo
+{
+    public int id;
+    public Vector3Int pos;
+    public BlockType[,,] map;
 }
 
 public class Chunk
@@ -68,9 +75,25 @@ public class Chunk
                 }
             }
         }
-
-        //根据生成的信息，Build出Chunk的网格
-        //BuildChunk();
+    }
+    public Chunk(ChunkInfo info)
+    {
+        Id = info.id;
+        position = info.pos;
+        map = info.map;
+        //遍历map，生成其中每个Block的信息
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < width; z++)
+            {
+                //获取当前位置方块随机生成的高度值
+                float genHeight = GenerateHeight(new Vector3Int(x, 0, z) + position);
+                for (int y = 0; y < height; y++)
+                {
+                   map[x, y, z] = GenerateBlockType(new Vector3Int(x, y, z) + position, genHeight);
+                }
+            }
+        }
     }
 
     int GenerateHeight(Vector3Int wPos)
@@ -121,5 +144,15 @@ public class Chunk
         }
         //其他情况，当前方块类型为碎石
         return BlockType.Gravel;
+    }
+
+    public ChunkInfo GetInfo()
+    {
+        return new ChunkInfo
+        {
+            id = Id,
+            pos = position,
+            map = map
+        };
     }
 }

@@ -12,7 +12,7 @@ public partial class EventHandler
             //保存数据
             DBManager.UpdatePlayerData(c.player.id, c.player.data);
             //移除
-            //PlayerManager.RemovePlayer(c.player.id); //:
+            RoomManager.RemovePlayer(c.player);
         }
     }
 
@@ -33,7 +33,6 @@ public partial class EventHandler
             {
                 Console.WriteLine("Ping Close " + s.socket.RemoteEndPoint.ToString());
                 NetManager.Close(s);
-                RoomManager.RemovePlayer(s.player);
                 return;
             }
         }

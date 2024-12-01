@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PanelManager : MonoBehaviour
+public class PanelManager : MonoSingleton<PanelManager>
 {
     private Dictionary<PanelType, BasePanel> panels;
 
@@ -13,6 +13,7 @@ public class PanelManager : MonoBehaviour
         panels[PanelType.RoomList] = GetComponentInChildren<RoomListPanel>();
         panels[PanelType.Battle] = GetComponentInChildren<BattlePanel>();
         panels[PanelType.Chat] = GetComponentInChildren<ChatPanel>();
+        panels[PanelType.Wait] = GetComponentInChildren<WaitPanel>();
         
         foreach (var panel in panels.Values)
         {
@@ -21,6 +22,7 @@ public class PanelManager : MonoBehaviour
 
         EventHandler.OnOpenPanel += Open;
         EventHandler.OnClosePanel += Close;
+        EventHandler.OnAfterLoadRes += CloseLoadPanel;
     }
     private void OnDestroy()
     {
@@ -37,5 +39,10 @@ public class PanelManager : MonoBehaviour
     {
         panels[type].gameObject.SetActive(false);
         panels[type].OnClose();
+    }
+
+    public void CloseLoadPanel()
+    {
+        Close(PanelType.Wait);
     }
 }

@@ -46,14 +46,6 @@ public class MsgEnterRoom : MsgBase
     public int mapId = 1;	//地图，只有一张
 }
 
-
-//玩家信息
-public class PlayerInfo
-{
-    public string id = "lpy";   //账号
-    public int isOwner = 0;		//是否是房主
-}
-
 //获取房间信息
 public class MsgGetRoomInfo : MsgBase
 {

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using SimplexNoise;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public enum BlockType : byte
 {
@@ -145,6 +146,11 @@ public class Chunk : MonoBehaviour, PoolObject
             tris.Add(index + 2);
             tris.Add(index + 0);
         }
+    }
+
+    public BlockType Type(Vector3Int pos)
+    {
+        return map[pos.x,pos.y,pos.z];
     }
 
     public void OnRecycle()

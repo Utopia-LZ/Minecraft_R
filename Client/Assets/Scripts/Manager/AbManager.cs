@@ -22,8 +22,6 @@ public class ABManager : MonoSingleton<ABManager>
     private Dictionary<string, string> clientDic = new();
     private int curVersion;
 
-    public GameObject waitPanel;
-
     private string serverUrl
     {
         get
@@ -82,7 +80,6 @@ public class ABManager : MonoSingleton<ABManager>
 
     public IEnumerator Init()
     {
-        EventHandler.OnAfterLoadRes += CloseLoadPanel;
         CheckAndCopyDirectory(basePath, persistentPath);
         yield return CheckAndUpdateResources();
     }
@@ -204,11 +201,6 @@ public class ABManager : MonoSingleton<ABManager>
         {
             Debug.LogError("Failed to save AssetBundle to local storage: " + e.Message);
         }
-    }
-
-    public void CloseLoadPanel()
-    {
-        waitPanel.SetActive(false);
     }
 
     //¼ÓÔØAB°ü

@@ -18,11 +18,12 @@
 	"RecoverHunger" : 3,
 	"RecoverSaturation" : 300,
 	"PlayerHp" : 20,
-	"WalkSpeed" : 10,
-	"RunSpeed" : 20,
+	"WalkSpeed" : 5,
+	"RunSpeed" : 8,
 	"RotateSpeed" : 40,
 	"PlayerDamage" : 1,
-	"JumpForce" : 6,
+	"JumpForce" : 10,
+	"GravityForce" : 9,
 	"Saturation" : 1000,
 	"HungerInterval" : 20,
 	"Hunger" : 20,
@@ -50,5 +51,6 @@
 	"BombFalloff" : 2,
 	"LocalSrcUrl" : "file://C:/Users/33572/Desktop/Minecraft_R/Src/Assetbundles/",
 	"ServerSrcUrl" : "https://gitee.com/Utopia-lz/mc_src/raw/master/AssetBundles/",
-	"PingInterval" : 30
+	"PingInterval" : 10,
+	"SaveInterval" : 200
 }

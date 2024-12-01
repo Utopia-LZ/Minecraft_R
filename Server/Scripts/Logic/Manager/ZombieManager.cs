@@ -1,4 +1,8 @@
 ﻿
+using Newtonsoft.Json;
+using static System.Reflection.Metadata.BlobBuilder;
+using System.Text;
+
 public class ZombieManager
 {
     public Dictionary<string, Zombie> Zombies = new Dictionary<string, Zombie>();
@@ -15,9 +19,17 @@ public class ZombieManager
         rand = new Random();
         generateCount = DataManager.Config.GenerateInterval;
     }
+    public ZombieManager(Room room, string data)
+    {
+        this.room = room;
+        rand = new Random();
+        generateCount = DataManager.Config.GenerateInterval;
+        Deserialize(data);
+    }
 
     public void Update()
     {
+        if (room == null) return;
         if (room.Time >= Room.DAY_TIME)
         {
             counter++;
@@ -129,5 +141,32 @@ public class ZombieManager
             msg.zombies[i++] = zombie;
         }
         player.Send(msg);
+    }
+
+    public string Serialize()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(index.ToString() + "|");
+        foreach(var zombie in Zombies.Values)
+        {
+            sb.Append(JsonConvert.SerializeObject(zombie.GetInfo()) + "&");
+        }
+        if (sb.Length > 0) sb.Remove(sb.Length - 1, 1);
+        return sb.ToString();
+    }
+
+    public void Deserialize(string data)
+    {
+        if (data == null || data == "") return;
+        string[] parts = data.Split('|');
+        index = int.Parse(parts[0]);
+        if (index == 0) return;
+        string[] zdata = parts[1].Split("&");
+        for(int i = 0; i < zdata.Length; i++)
+        {
+            ZombieInfo info = JsonConvert.DeserializeObject<ZombieInfo>(zdata[i]);
+            Zombie zombie = new Zombie(info);
+            Zombies[zombie.id] = zombie;
+        }
     }
 }
