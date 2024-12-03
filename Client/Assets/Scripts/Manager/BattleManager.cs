@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager
@@ -65,7 +63,7 @@ public class BattleManager
     }
 
     //重置战场
-    public static void Reset()
+    /*public static void Reset()
     {
         //场景
         foreach (BaseSteve steve in characters.Values)
@@ -75,7 +73,7 @@ public class BattleManager
         }
         //列表
         characters.Clear();
-    }
+    }*/
 
     //开始战斗
     public static void EnterBattle(MsgEnterRoom msg)
@@ -186,6 +184,12 @@ public class BattleManager
         MsgLeaveRoom msg = (MsgLeaveRoom)msgBase;
         if (msg.id == GameMain.id)
         {
+            if (msg.reason == 1)
+            {
+                Panel.RefreshHp(CtrlSteve.HP);
+                Panel.RefreshHunger(CtrlSteve.Hunger-Panel.meatCount);
+                MessageBox.Instance.Show("YOU DIED!");
+            }
             EventHandler.CallLeaveRoom(); //防止相机挂载在角色上被一同销毁
             EventHandler.CallClosePanel(PanelType.Battle);
             EventHandler.CallClosePanel(PanelType.Chat);
@@ -193,20 +197,16 @@ public class BattleManager
             foreach (var player in characters.Values)
             {
                 //MonoBehaviour.Destroy(player.gameObject);
-                ResManager.Instance.RecycleObj(player.gameObject, ObjType.Steve);
+                ResManager.Instance.RecycleObj(player.gameObject, ObjType.Steve, player);
             }
             characters.Clear();
-            if (msg.reason == 1)
-            {
-                MessageBox.Instance.Show("YOU DIED!");
-            }
         }
         else
         {
             if (characters.ContainsKey(msg.id))
             {
                 //GameObject.Destroy(characters[msg.id].gameObject);
-                ResManager.Instance.RecycleObj(characters[msg.id].gameObject, ObjType.Steve);
+                ResManager.Instance.RecycleObj(characters[msg.id].gameObject, ObjType.Steve,characters[msg.id]);
                 characters.Remove(msg.id);
             }
         }

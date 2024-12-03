@@ -80,13 +80,15 @@ public class PlayerManager
         foreach(var player in players.Values)
         {
             if(player.roomId != room.id) continue;
-            Vector3Int position = new Vector3Int(player.pos.x, player.pos.y, player.pos.z);
-            int damge = (int)Math.Min(Bomb.damage - Math.Sqrt((position - pos).Magnitude) * Bomb.falloff, 0);
-            if (damge == 0) continue;
-            player.hp -= Bomb.damage;
+            Vector3Int position = Vector3Int.Float2Int(player.pos);
+            Console.WriteLine("PlyerPos: " + position.ToString() + " BombPos: " + pos.ToString());
+            int damage = (int)Math.Max(Bomb.damage - Math.Sqrt((position - pos).Magnitude) * Bomb.falloff, 0);
+            Console.WriteLine("Bomb Damage: " + damage + " toPlayer: " + player.id);
+            if (damage == 0) continue;
+            player.hp -= damage;
             MsgHit msg = new MsgHit();
             msg.id = player.id;
-            msg.damage = Bomb.damage;
+            msg.damage = damage;
             room.Broadcast(msg);
         }
     }

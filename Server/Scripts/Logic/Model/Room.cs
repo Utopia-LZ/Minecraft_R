@@ -85,16 +85,12 @@ public class Room
         saveCounter++;
         if(saveCounter > SAVE_INTERVAL)
         {
+            return;
             saveCounter = 0;
-            //Console.WriteLine("G");
             string cData = chatManager.Serialize();
-            //Console.WriteLine("K");
             List<ChunkInfo> mData = mapManager.Serialize();
-            //Console.WriteLine("L");
             string zData = zombieManager.Serialize();
-            //Console.WriteLine("M");
             string pData = playerManager.Serialize();
-            //Console.WriteLine("N");
             DBManager.SaveRoomData(id, cData, mData, zData, pData);
             Console.WriteLine("Room Auto Save " + id);
         }
@@ -253,8 +249,13 @@ public class Room
         //ResetPlayers();
         //返回数据
         msg.mapId = 1;
-        msg.characters = new CharacterInfo[1];
-        msg.characters[0] = PlayerToCharInfo(pe);
+        msg.characters = new CharacterInfo[playerManager.players.Count];
+        int i = 0;
+        foreach(Player player in playerManager.players.Values)
+        {
+            if (player.roomId == -1) continue;
+            msg.characters[i++] = PlayerToCharInfo(player);
+        }
         pe.roomId = msg.id;
         Broadcast(msg);
 

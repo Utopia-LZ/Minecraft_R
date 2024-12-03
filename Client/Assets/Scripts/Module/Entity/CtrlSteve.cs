@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CtrlSteve : BaseSteve, PoolObject
+public class CtrlSteve : BaseSteve
 {
     public static float syncInterval; //0.05f; //同步帧率
     public static float actInterval; //攻击间隔
@@ -79,6 +79,12 @@ public class CtrlSteve : BaseSteve, PoolObject
             item.count = 1;
             item.type = BlockType.Light;
             BagManager.Instance.AddItem(item);
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            MsgTime msg = new MsgTime();
+            msg.Time = LightManager.CYCLE / 2;
+            NetManager.Send(msg);
         }
 
         #endregion
@@ -182,6 +188,8 @@ public class CtrlSteve : BaseSteve, PoolObject
                 }
                 else if(layer == layerZombie)
                 {
+                    SoundManager.Instance.PlaySound(ObjType.MusicAttack);
+                    SoundManager.Instance.PlaySound(ObjType.MusicZombieHurt);
                     MsgZombieHit msg = new MsgZombieHit();
                     msg.zombieId = hit.collider.GetComponent<Zombie>().id;
                     msg.damage = damage;
@@ -206,6 +214,7 @@ public class CtrlSteve : BaseSteve, PoolObject
 
                     if(useItem.type == BlockType.Grass) //:可改成判断枚举区间
                     {
+                        SoundManager.Instance.PlaySound(ObjType.MusicPut);
                         ChangeBlock(direction, hit.point, BlockType.Grass);
                         BagManager.Instance.RemoveItem(1);
                     }
@@ -213,11 +222,12 @@ public class CtrlSteve : BaseSteve, PoolObject
                          || useItem.type == BlockType.Bomb
                          || useItem.type == BlockType.Light)
                     {
+                        SoundManager.Instance.PlaySound(ObjType.MusicPut);
                         Vector3Int corner = CalChangeCorner(direction, hit.point, useItem.type);
                         EntityManager.Instance.SendGenerate(corner, useItem.type);
                         BagManager.Instance.RemoveItem(1);
                     }
-                    else if(useItem.type == BlockType.Carrion)
+                    else if(useItem.type == BlockType.Carrion) //召唤僵尸
                     {
                         Vector3Int corner = CalChangeCorner(direction, hit.point, useItem.type);
                         MsgTest msg = new MsgTest();
@@ -242,6 +252,7 @@ public class CtrlSteve : BaseSteve, PoolObject
                 if(useItem != null && useItem.type == BlockType.Carrion)
                 {
                     Debug.Log("Eat Carrion");
+                    SoundManager.Instance.PlaySound(ObjType.MusicEat);
                     MsgHungry msg = new MsgHungry();
                     msg.id = id;
                     msg.hunger = Zombie.RecoverHunger;
@@ -268,6 +279,7 @@ public class CtrlSteve : BaseSteve, PoolObject
         msg.chunkId = MapManager.chunks[msg.chunkPos].Id;
         msg.type = type;
         Debug.Log("ChangeBlock: " + msg.blockPos.ToString());
+        SoundManager.Instance.PlaySound(ObjType.MusicBroke);
         NetManager.Send(msg);
     }
 
@@ -287,12 +299,6 @@ public class CtrlSteve : BaseSteve, PoolObject
         pos.x = Mathf.Floor(pos.x / (float)Chunk.width) * Chunk.width;
         pos.z = Mathf.Floor(pos.z / (float)Chunk.width) * Chunk.width;
         return new Vector3Int((int)pos.x, 0, (int)pos.z);
-    }
-
-    public void OnRecycle()
-    {
-        Destroy(GetComponent<CameraFollow>());
-        Destroy(this);
     }
 
     public void OnDrawGizmos()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class EventHandler
 {
@@ -28,6 +29,7 @@ public static class EventHandler
 
     public static void CallMouseEvent(int layer)
     {
+        Debug.Log("CallMouseEvent: " + layer);
         if (MouseEvents.ContainsKey(layer))
         {
             MouseEvents[layer]?.Invoke();
@@ -36,10 +38,12 @@ public static class EventHandler
 
     public static void CallOpenPanel(PanelType type)
     {
+        SoundManager.Instance.PlaySound(ObjType.MusicClick);
         OnOpenPanel?.Invoke(type);
     }
     public static void CallClosePanel(PanelType type)
     {
+        SoundManager.Instance.PlaySound(ObjType.MusicClick);
         OnClosePanel?.Invoke(type);
     }
     public static void CallHPChanged(int hp)

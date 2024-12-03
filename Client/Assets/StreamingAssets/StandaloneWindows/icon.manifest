@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 738761804
+CRC: 2153522493
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9560f831c3573c7bb2531a1c9cc18d1a
+    Hash: dbc96855d1b79d3cfe26fcb190686deb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 9560f831c3573c7bb2531a1c9cc18d1a
+    Hash: dbc96855d1b79d3cfe26fcb190686deb
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -23,4 +23,5 @@ Assets:
 - Assets/Pictures/icon_chest.png
 - Assets/Pictures/icon_grass.png
 - Assets/Pictures/icon_bomb.png
+- Assets/Pictures/icon_dirt.png
 Dependencies: []

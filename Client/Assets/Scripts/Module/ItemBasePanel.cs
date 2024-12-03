@@ -5,12 +5,7 @@ public class ItemBasePanel : BasePanel
     public Transform[] slots;
     public Item[] Items;
 
-    private void Start()
-    {
-        InitSlot();
-    }
-
-    protected virtual void InitSlot() { }
+    public virtual void InitSlot() { }
 
     public void AddItem(ItemInfo item, ItemPanelType panelType, int idx = -1)
     {
@@ -59,6 +54,7 @@ public class ItemBasePanel : BasePanel
             Debug.Log("It's null, Ins again");
             GameObject go = ResManager.Instance.GetGameObject(ObjType.Item, slots[slot.idx]);
             Item newItem = go.GetComponent<Item>();
+            newItem.Init(slot.item.type);
             Items[slot.idx] = newItem;
         }
         Items[slot.idx].Refresh(slot.item.type, slot.item.count);

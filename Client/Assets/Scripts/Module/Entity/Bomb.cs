@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : MonoBehaviour, PoolObject
 {
     public MeshRenderer mesh;
     public static int radius = 3;
@@ -11,6 +11,8 @@ public class Bomb : MonoBehaviour
 
     public void SendIgnite()
     {
+        mesh = GetComponent<MeshRenderer>();
+        SoundManager.Instance.PlaySound(ObjType.MusicBurn);
         state = BombState.Burning;
         MsgBombState msg = new MsgBombState();
         msg.id = idx;
@@ -42,6 +44,14 @@ public class Bomb : MonoBehaviour
 
     public void Explode()
     {
-        Destroy(gameObject);
+        SoundManager.Instance.PlaySound(ObjType.MusicExplode);
+        //Destroy(gameObject);
+        //ResManager.Instance.RecycleObj(gameObject, ObjType.Bomb,this);
+        BombManager.Instance.RemoveBomb(idx);
+    }
+
+    public void OnRecycle()
+    {
+        Destroy(this);
     }
 }

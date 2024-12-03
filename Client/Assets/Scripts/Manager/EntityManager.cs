@@ -38,6 +38,7 @@ public class EntityManager : Singleton<EntityManager>
         }
         msg.generate = false;
         NetManager.Send(msg);
+        SoundManager.Instance.PlaySound(ObjType.MusicBroke);
     }
 
     private void LeaveRoom()

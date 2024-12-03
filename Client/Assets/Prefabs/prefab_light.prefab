@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 412697173465354431}
   - component: {fileID: 3863070062509425961}
   - component: {fileID: 8517192647816098759}
-  - component: {fileID: 4279922297755641551}
   m_Layer: 14
   m_Name: prefab_light
   m_TagString: Untagged
@@ -169,16 +168,3 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &4279922297755641551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 56944351519031181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab166907ec22daa4585f8f9bb20da51e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idx: 0

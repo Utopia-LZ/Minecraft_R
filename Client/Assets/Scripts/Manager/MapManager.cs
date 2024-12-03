@@ -52,8 +52,7 @@ public class MapManager
         foreach(var chunk in chunks.Values)
         {
             //GameObject.Destroy(chunk.gameObject);
-            ResManager.Instance.RecycleObj(chunk.gameObject, ObjType.Chunk);
-            chunk.OnRecycle();
+            ResManager.Instance.RecycleObj(chunk.gameObject, ObjType.Chunk, chunk);
         }
         chunks.Clear();
     }

@@ -10,7 +10,7 @@ public class DataManager : Singleton<DataManager>
     {
         get
         {
-#if UNITY_EDITOR
+#if true //UNITY_EDITOR
             return "file://C:/Users/33572/Desktop/Minecraft_R/Src/Config/config.txt";
 #else
             return "https://gitee.com/Utopia-lz/mc_src/raw/master/Config/config.txt";

@@ -50,8 +50,8 @@ public class ChestManager : Singleton<ChestManager>
         {
             //GameObject.Destroy(Chests[idx].ChestPanel);
             //GameObject.Destroy(Chests[idx].gameObject);
-            ResManager.Instance.RecycleObj(Chests[idx].ChestPanel.gameObject, ObjType.ChestPanel);
-            ResManager.Instance.RecycleObj(Chests[idx].gameObject, ObjType.Chest);
+            ResManager.Instance.RecycleObj(Chests[idx].ChestPanel.gameObject, ObjType.ChestPanel, Chests[idx].ChestPanel);
+            ResManager.Instance.RecycleObj(Chests[idx].gameObject, ObjType.Chest, Chests[idx]);
             Chests.Remove(idx);
         }
         else { Debug.Log("Chest doesn't exist! " + idx); }
@@ -95,8 +95,8 @@ public class ChestManager : Singleton<ChestManager>
         {
             //GameObject.Destroy(chest.ChestPanel.gameObject);
             //GameObject.Destroy(chest.gameObject);
-            ResManager.Instance.RecycleObj(chest.ChestPanel.gameObject, ObjType.ChestPanel);
-            ResManager.Instance.RecycleObj(chest.gameObject, ObjType.Chest);
+            ResManager.Instance.RecycleObj(chest.ChestPanel.gameObject, ObjType.ChestPanel, chest.ChestPanel);
+            ResManager.Instance.RecycleObj(chest.gameObject, ObjType.Chest, chest);
         }
         Chests.Clear();
     }

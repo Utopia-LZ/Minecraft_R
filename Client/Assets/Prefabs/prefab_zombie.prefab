@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2800691385363185176}
   - component: {fileID: 5301947261822758453}
   - component: {fileID: 4659968666969382819}
-  - component: {fileID: 5238017266917695126}
   m_Layer: 15
   m_Name: Hand
   m_TagString: Untagged
@@ -28,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 7802905708321958986}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.632}
-  m_LocalScale: {x: 0.37678358, y: 0.09412633, z: 0.45603952}
+  m_LocalPosition: {x: 0, y: 0.197, z: 0.632}
+  m_LocalScale: {x: 0.8128199, y: 0.09412633, z: 0.7750225}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8158761054106184058}
@@ -62,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ab6bb8f4e91e44e4f8c79a34ef9993a1, type: 2}
+  - {fileID: 2100000, guid: dbd3084b0687fc544bccba7f383fb4fd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,27 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5238017266917695126
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802905708321958986}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8772292269980989220
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +96,6 @@ GameObject:
   - component: {fileID: 8669657783784138779}
   - component: {fileID: 4979282896877702629}
   - component: {fileID: 3369438516744348681}
-  - component: {fileID: 1277028595436609674}
   m_Layer: 15
   m_Name: prefab_zombie
   m_TagString: Untagged
@@ -242,24 +219,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &1277028595436609674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8772292269980989220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ade34f7b05731564d8c1269d1687de5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 0
-  runSpeed: 0
-  rotateSpeed: 0
-  rb: {fileID: 0}
-  hp: 0
-  maxHP: 0
-  damage: 0
-  id: 
-  Kind: 2

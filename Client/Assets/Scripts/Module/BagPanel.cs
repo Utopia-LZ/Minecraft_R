@@ -4,6 +4,11 @@ public class BagPanel : ItemBasePanel
 {
     public GameObject Panel; //±³°üÃæ°å
 
+    private void Start()
+    {
+        InitSlot();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -12,7 +17,7 @@ public class BagPanel : ItemBasePanel
         }
     }
 
-    protected override void InitSlot()
+    public override void InitSlot()
     {
         Items = new Item[BagManager.SLOT_COUNT];
         BagManager.Instance.BagPanel = this;
@@ -50,8 +55,7 @@ public class BagPanel : ItemBasePanel
         {
             if (Items[i] == null) continue;
             //Destroy(Items[i].gameObject);
-            ResManager.Instance.RecycleObj(Items[i].gameObject, ObjType.Item);
-            Items[i].OnRecycle();
+            ResManager.Instance.RecycleObj(Items[i].gameObject, ObjType.Item, Items[i]);
             Items[i] = null;
         }
     }

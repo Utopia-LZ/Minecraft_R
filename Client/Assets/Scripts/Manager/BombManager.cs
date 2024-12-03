@@ -36,7 +36,7 @@ public class BombManager : Singleton<BombManager>
         if (Bombs.ContainsKey(idx))
         {
             //GameObject.Destroy(Bombs[idx].gameObject);
-            ResManager.Instance.RecycleObj(Bombs[idx].gameObject, ObjType.Bomb);
+            ResManager.Instance.RecycleObj(Bombs[idx].gameObject, ObjType.Bomb,Bombs[idx]);
             Bombs.Remove(idx);
         }
         else { Debug.Log("Bomb doesn't exist! " + idx); }
@@ -47,7 +47,7 @@ public class BombManager : Singleton<BombManager>
         foreach (var bomb in Bombs.Values)
         {
             //GameObject.Destroy(bomb.gameObject);
-            ResManager.Instance.RecycleObj(bomb.gameObject, ObjType.Bomb);
+            ResManager.Instance.RecycleObj(bomb.gameObject, ObjType.Bomb, bomb);
         }
         Bombs.Clear();
     }

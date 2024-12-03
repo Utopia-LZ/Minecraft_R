@@ -137,6 +137,11 @@ public class Player
             msg.reason = 1;
             room.Broadcast(msg);
             room.RemovePlayer(id);
+
+            //Reset
+            hp = HP;
+            hunger = Hunger;
+            saturation = Saturation;
         }
     }
 

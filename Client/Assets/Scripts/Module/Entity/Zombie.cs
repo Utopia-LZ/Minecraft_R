@@ -4,6 +4,24 @@ public class Zombie : BaseSteve, PoolObject
 {
     public static int RecoverHunger;
     public static int RecoverSaturation;
+    public static int TryTauntInterval;
+    public static int TauntChance;
+
+    private float counter = 0;
+
+    private void Update()
+    {
+        counter += Time.deltaTime;
+        if(counter >= TryTauntInterval)
+        {
+            counter = 0;
+            int rdm = Random.Range(0, TauntChance);
+            if(rdm == 1)
+            {
+                SoundManager.Instance.PlaySound(ObjType.MusicTaunt);
+            }
+        }
+    }
 
     public override void Init()
     {
@@ -20,19 +38,13 @@ public class Zombie : BaseSteve, PoolObject
         transform.forward = Vector3Int.V3IntToV3(msg.forward).normalized;
     }
 
-    public void AttackAnim()
-    {
-        //: animation
-    }
-
     public void TakeDamage(int damage)
     {
         Attacked(damage);
-        //: animation
     }
 
-    public void OnRecycle()
+    public new void OnRecycle()
     {
-        hp = 10;
+        Destroy(this);
     }
 }

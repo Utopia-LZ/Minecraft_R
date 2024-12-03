@@ -14,8 +14,11 @@ public class ZombieManager : Singleton<ZombieManager>
         NetManager.AddMsgListener("MsgLoadZombie", OnMsgLoadZombie);
         Zombies = new();
 
-        Zombie.RecoverHunger = DataManager.Instance.Config.RecoverHunger;
-        Zombie.RecoverSaturation = DataManager.Instance.Config.RecoverSaturation;
+        Config config = DataManager.Instance.Config;
+        Zombie.RecoverHunger = config.RecoverHunger;
+        Zombie.RecoverSaturation = config.RecoverSaturation;
+        Zombie.TryTauntInterval = config.TryTauntInterval;
+        Zombie.TauntChance = config.TauntChance;
     }
 
     public void Generate(CharacterInfo info)
@@ -24,6 +27,7 @@ public class ZombieManager : Singleton<ZombieManager>
         GameObject go = ResManager.Instance.GetGameObject(ObjType.Zombie);
         go.transform.position = Vector3Int.V3IntToV3(info.pos);
         Zombie zombie = go.GetComponent<Zombie>();
+        zombie.Init();
         zombie.id = info.id;
         zombie.hp = info.hp;
         zombie.Kind = info.Kind;
@@ -36,8 +40,7 @@ public class ZombieManager : Singleton<ZombieManager>
         foreach(var zombie in Zombies.Values)
         {
             //GameObject.Destroy(zombie.gameObject);
-            zombie.OnRecycle();
-            ResManager.Instance.RecycleObj(zombie.gameObject, ObjType.Zombie);
+            ResManager.Instance.RecycleObj(zombie.gameObject, ObjType.Zombie, zombie);
         }
         Zombies.Clear();
     }
@@ -67,8 +70,8 @@ public class ZombieManager : Singleton<ZombieManager>
             if (Zombies.ContainsKey(msg.info.id))
             {
                 //GameObject.Destroy(Zombies[msg.info.id].gameObject);
-                Zombies[msg.info.id].OnRecycle();
-                ResManager.Instance.RecycleObj(Zombies[msg.info.id].gameObject, ObjType.Zombie);
+                SoundManager.Instance.PlaySound(ObjType.MusicZombieDeath);
+                ResManager.Instance.RecycleObj(Zombies[msg.info.id].gameObject, ObjType.Zombie, Zombies[msg.info.id]);
                 Zombies.Remove(msg.info.id);    
             }
         }
@@ -79,7 +82,6 @@ public class ZombieManager : Singleton<ZombieManager>
         Debug.Log("OnMsgZombieAttack");
         MsgZombieAttack msg = (MsgZombieAttack)msgBase;
         Zombie zombie = Zombies[msg.zombieId];
-        zombie.AttackAnim();
         MsgHit msgH = new MsgHit();
         msgH.id = msg.playerId;
         msgH.damage = zombie.damage;

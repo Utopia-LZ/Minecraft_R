@@ -60,5 +60,7 @@
         BombManager.BombExplode(position, room);
         ItemManager.DroppedExplode(position, room, playerId);
         LightManager.LightExplode(position, room);
+
+        BombManager.Bombs.Remove(idx);
     }
 }

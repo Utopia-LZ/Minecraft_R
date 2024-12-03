@@ -14,13 +14,17 @@ public class Item : MonoBehaviour, PoolObject
 
     private void Start()
     {
-        HighLight.enabled = false;
-        GetComponent<Button>().onClick.AddListener(OnClickSelect);
-        Icon = GetComponent<Image>();
+        
     }
 
     public void Init(BlockType type)
     {
+        Debug.Log("Init Item");
+        GetComponent<Button>().onClick.AddListener(OnClickSelect);
+        Count = GetComponentInChildren<TMP_Text>();
+        Icon = GetComponent<Image>();
+        HighLight = transform.GetChild(0).GetComponent<Image>();
+        HighLight.enabled = false;
     }
 
     public void Refresh(BlockType type, int delta = 0)
@@ -28,6 +32,7 @@ public class Item : MonoBehaviour, PoolObject
         ObjType objType = type switch
         {
             BlockType.Grass => ObjType.IconGrass,
+            BlockType.Dirt => ObjType.IconDirt,
             BlockType.Chest => ObjType.IconChest,
             BlockType.Bomb => ObjType.IconBomb,
             BlockType.Light => ObjType.IconLight,
@@ -42,7 +47,7 @@ public class Item : MonoBehaviour, PoolObject
         if (count <= 0)
         {
             //Destroy(gameObject);
-            ResManager.Instance.RecycleObj(gameObject, ObjType.Item);
+            ResManager.Instance.RecycleObj(gameObject, ObjType.Item, this);
             Debug.Log("Recycle Item");
         }
     }
@@ -73,6 +78,9 @@ public class Item : MonoBehaviour, PoolObject
 
     public void OnRecycle()
     {
-        count = 0;
+        Icon.sprite = null;
+        Count.text = "";
+        HighLight.enabled = true;
+        DestroyImmediate(this);
     }
 }

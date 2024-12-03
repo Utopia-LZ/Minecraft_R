@@ -26,7 +26,7 @@ public class ABManager : MonoSingleton<ABManager>
     {
         get
         {
-#if UNITY_EDITOR
+#if true //UNITY_EDITOR
             return DataManager.Instance.Config.LocalSrcUrl + mainABName + '/';
 #else
             return DataManager.Instance.Config.ServerSrcUrl + mainABName + '/';

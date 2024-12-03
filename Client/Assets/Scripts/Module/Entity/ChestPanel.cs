@@ -1,15 +1,20 @@
 using UnityEngine;
-using Pair = System.Collections.Generic.KeyValuePair<UnityEngine.Transform, Item>;
 
-public class ChestPanel: ItemBasePanel
+public class ChestPanel: ItemBasePanel, PoolObject
 {
     public static int CHEST_SLOT_COUNT;
 
     public int idx = -1;
     public int Offset { get {  return idx+1000; } }
 
-    protected override void InitSlot()
+    public override void InitSlot()
     {
+        slots = new Transform[CHEST_SLOT_COUNT];
+        int i = 0;
+        foreach(Transform child in transform)
+        {
+            slots[i++] = child;
+        }
         Items = new Item[CHEST_SLOT_COUNT];
         int layer = LayerMask.NameToLayer("ChestPanel") + Offset;
         EventHandler.MouseEvents[layer] = ShiftItems;
@@ -23,6 +28,7 @@ public class ChestPanel: ItemBasePanel
 
     public void ShiftItems()
     {
+        Debug.Log("Chest ShiftItems");
         if (Input.GetKey(KeyCode.LeftShift))
         {
             Debug.Log("Chest Panel ShiftItems " + idx);
@@ -36,5 +42,12 @@ public class ChestPanel: ItemBasePanel
                 Debug.Log("Shift item is null!");
             }
         }
+    }
+
+    public void OnRecycle()
+    {
+        int layer = LayerMask.NameToLayer("ChestPanel") + Offset;
+        EventHandler.MouseEvents[layer] = null;
+        Destroy(this);
     }
 }

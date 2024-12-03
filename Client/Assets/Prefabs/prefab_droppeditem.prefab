@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7028446219035694545}
   - component: {fileID: 185835564443281443}
   - component: {fileID: 2632796897726851657}
-  - component: {fileID: 7905713382124226122}
   - component: {fileID: 4796135233925108368}
   m_Layer: 0
   m_Name: prefab_droppeditem
@@ -107,25 +106,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7905713382124226122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4310617113265894234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f4b0aaa5a662941895d71b2ad717f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: -1
-  info:
-    id: 0
-    type: 0
-    count: 0
-  lockedTime: 0
-  rotateSpeed: 50
 --- !u!54 &4796135233925108368
 Rigidbody:
   m_ObjectHideFlags: 0

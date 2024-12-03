@@ -46,7 +46,7 @@ public class BattlePanel : BasePanel
     }
 
     //¸üÐÂhp
-    private void RefreshHp(int value)
+    public void RefreshHp(int value)
     {
         Debug.Log("RefreshHp " + value);
         int delta = value - liveCount;

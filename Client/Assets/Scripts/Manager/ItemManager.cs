@@ -63,7 +63,7 @@ public class ItemManager : Singleton<ItemManager>
             if (msg.pickedup && msg.id == GameMain.id)
                 BagManager.Instance.AddItem(DroppedItems[msg.idx].info);
             //GameObject.Destroy();
-            ResManager.Instance.RecycleObj(DroppedItems[msg.idx].gameObject, ObjType.Dropped);
+            ResManager.Instance.RecycleObj(DroppedItems[msg.idx].gameObject, ObjType.Dropped,DroppedItems[msg.idx]);
             DroppedItems.Remove(msg.idx);
         }
     }

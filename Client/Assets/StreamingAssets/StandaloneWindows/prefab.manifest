@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1762863217
+CRC: 3601021893
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 58a935280e20f653a4f7d88545b2cddd
+    Hash: dab0d61a97896fd22806b276ce719590
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5318680c7e09f9bb9e8e322e1e66ff57
+    Hash: 1b3f525efe79a878bfff460b19e0adea
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 58a935280e20f653a4f7d88545b2cddd
+    Hash: dab0d61a97896fd22806b276ce719590
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -37,31 +37,17 @@ ClassTypes:
 - Class: 108
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: b59f9a8073a61c9449a16b1250eeb6cf, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: d86b2f2bf74d45f449c255043582de33, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: e14023e28009e784bb77604fc7d03521, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: ab166907ec22daa4585f8f9bb20da51e, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 38f4b0aaa5a662941895d71b2ad717f6, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: c8855d0aa569ffa4d83d2276b8c987d7, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: ade34f7b05731564d8c1269d1687de5c, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 006a27b4c5f272a488ff04fa5389ad52, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -73,10 +59,6 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
-- AssemblyName: Assembly-CSharp
-  ClassName: ItemInfo
-- AssemblyName: Assembly-CSharp
-  ClassName: Vector3Int
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.FaceInfo_Legacy
 - AssemblyName: Unity.TextMeshPro

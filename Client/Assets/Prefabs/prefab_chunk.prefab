@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1918617621322353386}
   - component: {fileID: 480973595882834747}
   - component: {fileID: 8119047425915247739}
-  - component: {fileID: 7557422980903627677}
   m_Layer: 8
   m_Name: prefab_chunk
   m_TagString: Untagged
@@ -107,20 +106,3 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8910962685505539093}
   m_Mesh: {fileID: 0}
---- !u!114 &7557422980903627677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8910962685505539093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d86b2f2bf74d45f449c255043582de33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Id: 0
-  msgPos:
-    x: 0
-    y: 0
-    z: 0

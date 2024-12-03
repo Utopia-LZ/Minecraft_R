@@ -155,7 +155,7 @@ public class Chunk : MonoBehaviour, PoolObject
 
     public void OnRecycle()
     {
-        
+        Destroy(this);
     }
 }
 

@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 4277056652
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ad70c1c778b844a51f9a14736cb869de
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: ad70c1c778b844a51f9a14736cb869de
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Music/music_eat.mp3
+- Assets/Music/music_taunt.mp3
+- Assets/Music/music_hurt.mp3
+- Assets/Music/music_zombiehurt.mp3
+- Assets/Music/music_explode.mp3
+- Assets/Music/music_click.mp3
+- Assets/Music/music_put.mp3
+- Assets/Music/music_broke.mp3
+- Assets/Music/music_move.mp3
+- Assets/Music/music_attack.mp3
+- Assets/Music/music_burn.mp3
+- Assets/Music/music_zombiedeath.mp3
+- Assets/Music/music_chest.mp3
+Dependencies: []

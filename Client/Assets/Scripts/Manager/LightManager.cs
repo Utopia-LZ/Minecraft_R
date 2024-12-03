@@ -70,7 +70,7 @@ public class LightManager : Singleton<LightManager>
         if (Lights.ContainsKey(idx))
         {
             //GameObject.Destroy(Lights[idx].gameObject);
-            ResManager.Instance.RecycleObj(Lights[idx].gameObject, ObjType.Light);
+            ResManager.Instance.RecycleObj(Lights[idx].gameObject, ObjType.Light,Lights[idx]);
             Lights.Remove(idx);
         }
         else { Debug.Log("Light doesn't exist! " + idx); }
@@ -81,7 +81,7 @@ public class LightManager : Singleton<LightManager>
         foreach (var light in Lights.Values)
         {
             //GameObject.Destroy(light.gameObject);
-            ResManager.Instance.RecycleObj(light.gameObject, ObjType.Light);
+            ResManager.Instance.RecycleObj(light.gameObject, ObjType.Light, light);
         }
         Lights.Clear();
     }

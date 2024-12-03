@@ -10,7 +10,7 @@ public struct DroppedInfo
     public int count;
 }
 
-public class DroppedItem : MonoBehaviour
+public class DroppedItem : MonoBehaviour, PoolObject
 {
     private MeshRenderer MeshRenderer;
 
@@ -39,6 +39,7 @@ public class DroppedItem : MonoBehaviour
             BlockType.Bomb => ObjType.MatBomb,
             BlockType.Light => ObjType.MatLight,
             BlockType.Dirt => ObjType.MatDirt,
+            BlockType.Carrion => ObjType.MatCarrion,
             _ => ObjType.None
         };
         MeshRenderer.material = ResManager.Instance.LoadResources<Material>(objType);
@@ -62,5 +63,10 @@ public class DroppedItem : MonoBehaviour
             };
             NetManager.Send(msg);
         }
+    }
+
+    public void OnRecycle()
+    {
+        Destroy(this);
     }
 }

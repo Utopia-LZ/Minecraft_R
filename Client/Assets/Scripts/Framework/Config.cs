@@ -17,6 +17,8 @@ public class Config
 	public int GenerateInterval; //僵尸尝试刷新间隔(tick)
 	public int ZombieAttackInterval; //僵尸攻击间隔(tick)
 	public int FrameCount; //僵尸移动单位距离划分帧数
+	public int TryTauntInterval; //僵尸尝试低吼间隔(s)
+	public int TauntChance; //僵尸低吼几率(1/)
 	public int RecoverHunger; //腐肉恢复饥饿值
 	public int RecoverSaturation; //腐肉恢复饱食度
 	public int PlayerHp; //玩家血量
