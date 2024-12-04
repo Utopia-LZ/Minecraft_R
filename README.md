@@ -2,7 +2,7 @@
 
 #### 特点
 
-Socket联机 
+Socket联机  
 状态同步  
 四向链表建图  
 MySql存图  
